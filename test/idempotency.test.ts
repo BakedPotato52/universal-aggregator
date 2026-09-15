@@ -4,9 +4,9 @@ import { IdempotencyManager } from '../src/core/idempotency/idempotency.manager.
 describe('IdempotencyManager', () => {
   let manager: IdempotencyManager;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     manager = IdempotencyManager.getInstance(3600);
-    manager.clear();
+    await manager.clear();
   });
 
   it('should acquire lock for a new idempotency key', async () => {
@@ -29,7 +29,7 @@ describe('IdempotencyManager', () => {
     await manager.acquireLock('key_3', payload);
 
     const expectedResponse = { txnId: 'txn_123', status: 'SUCCESS' };
-    await manager.saveResponse('key_3', 201, expectedResponse);
+    await manager.saveResponse('key_3', 201, expectedResponse, payload);
 
     const secondRequest = await manager.acquireLock('key_3', payload);
     expect(secondRequest.acquired).toBe(false);

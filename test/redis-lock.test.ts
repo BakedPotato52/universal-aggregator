@@ -4,9 +4,9 @@ import { IdempotencyManager } from '../src/core/idempotency/idempotency.manager.
 describe('Production Idempotency & Distributed Lock Layer', () => {
   let idempotency: IdempotencyManager;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     idempotency = IdempotencyManager.getInstance(3600);
-    idempotency.clear();
+    await idempotency.clear();
   });
 
   it('should acquire atomic lock and prevent double-debit race conditions', async () => {

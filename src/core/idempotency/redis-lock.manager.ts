@@ -40,7 +40,7 @@ export class RedisDistributedLockManager {
   ): Promise<LockResult> {
     const isUp = await isRedisAvailable();
     if (!isUp) {
-      return { acquired: false }; // Handled by caller fallback
+      return { acquired: false };
     }
 
     const redis = getRedisClient();
@@ -65,6 +65,9 @@ export class RedisDistributedLockManager {
               body: parsed.responseBody,
             },
           };
+        }
+        if (parsed.status === 'PROCESSING') {
+          return { acquired: false, inFlight: true };
         }
       }
 
@@ -109,9 +112,18 @@ export class RedisDistributedLockManager {
     const redis = getRedisClient();
     const lockKey = `lock:idempotency:${key}`;
     const dataKey = `data:idempotency:${key}`;
-    const payloadHash = this.hashPayload(payload);
 
     try {
+      let payloadHash: string;
+      if (typeof payload === 'string' && /^[0-9a-f]{64}$/i.test(payload)) {
+        payloadHash = payload;
+      } else if (payload && Object.keys(payload).length > 0) {
+        payloadHash = this.hashPayload(payload);
+      } else {
+        const existingData = await redis.get(dataKey);
+        payloadHash = existingData ? JSON.parse(existingData).payloadHash : this.hashPayload({});
+      }
+
       // Save cached response
       await redis.set(
         dataKey,
@@ -163,6 +175,24 @@ export class RedisDistributedLockManager {
         await redis.del(lockKey);
       }
       await redis.del(dataKey);
+    } catch {}
+  }
+
+  /**
+   * Clear all Redis test keys
+   */
+  public async clearAll(): Promise<void> {
+    const isUp = await isRedisAvailable();
+    if (!isUp) return;
+
+    const redis = getRedisClient();
+    try {
+      const lockKeys = await redis.keys('lock:idempotency:*');
+      const dataKeys = await redis.keys('data:idempotency:*');
+      const allKeys = [...lockKeys, ...dataKeys];
+      if (allKeys.length > 0) {
+        await redis.del(...allKeys);
+      }
     } catch {}
   }
 

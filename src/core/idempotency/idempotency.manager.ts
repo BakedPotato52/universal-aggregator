@@ -22,7 +22,6 @@ export class IdempotencyManager {
   private constructor(ttlSeconds = 86400) {
     this.defaultTtlMs = ttlSeconds * 1000;
     this.redisLockManager = RedisDistributedLockManager.getInstance();
-    // Periodic in-memory garbage collection
     setInterval(() => this.cleanupExpiredKeys(), 10 * 60 * 1000).unref();
   }
 
@@ -52,29 +51,11 @@ export class IdempotencyManager {
     mismatch?: boolean;
     cachedResponse?: { statusCode: number; body: any };
   }> {
-    // 1. Try Redis Distributed Lock first
-    const redisUp = await isRedisAvailable();
-    if (redisUp) {
-      const redisResult = await this.redisLockManager.acquireLock(
-        key,
-        payload,
-        Math.floor((ttlMs || this.defaultTtlMs) / 1000)
-      );
-      if (
-        redisResult.acquired ||
-        redisResult.inFlight ||
-        redisResult.mismatch ||
-        redisResult.cachedResponse
-      ) {
-        return redisResult;
-      }
-    }
-
-    // 2. Fallback to Local In-Memory Idempotency Store
     const now = Date.now();
     const payloadHash = this.hashPayload(payload);
-    const existing = this.cache.get(key);
 
+    // 1. Check local in-memory cache first
+    const existing = this.cache.get(key);
     if (existing) {
       if (existing.expiresAt < now) {
         this.cache.delete(key);
@@ -93,6 +74,35 @@ export class IdempotencyManager {
       }
     }
 
+    // 2. Try Redis Distributed Lock if available
+    try {
+      const redisUp = await isRedisAvailable();
+      if (redisUp) {
+        const redisResult = await this.redisLockManager.acquireLock(
+          key,
+          payload,
+          Math.floor((ttlMs || this.defaultTtlMs) / 1000)
+        );
+
+        if (redisResult.inFlight || redisResult.mismatch || redisResult.cachedResponse) {
+          return redisResult;
+        }
+
+        if (redisResult.acquired) {
+          this.cache.set(key, {
+            key,
+            payloadHash,
+            status: 'PROCESSING',
+            createdAt: now,
+            expiresAt: now + (ttlMs || this.defaultTtlMs),
+            lockToken: redisResult.lockToken,
+          });
+          return redisResult;
+        }
+      }
+    } catch {}
+
+    // 3. Fallback to Local In-Memory Idempotency Lock
     const expiration = now + (ttlMs || this.defaultTtlMs);
     const lockToken = crypto.randomUUID();
     this.cache.set(key, {
@@ -117,35 +127,42 @@ export class IdempotencyManager {
     payload?: any,
     lockToken?: string
   ): Promise<void> {
-    // Save to Redis
-    const redisUp = await isRedisAvailable();
-    if (redisUp && payload) {
-      await this.redisLockManager.saveResponse(
-        key,
-        lockToken,
-        statusCode,
-        responseBody,
-        payload
-      );
-    }
+    const existing = this.cache.get(key);
 
     // Save to in-memory store
-    const existing = this.cache.get(key);
     if (existing) {
       existing.status = 'COMPLETED';
       existing.responseStatusCode = statusCode;
       existing.responseBody = responseBody;
     }
+
+    // Save to Redis if available
+    try {
+      const redisUp = await isRedisAvailable();
+      if (redisUp) {
+        const dataPayload = payload || existing?.payloadHash || {};
+        await this.redisLockManager.saveResponse(
+          key,
+          lockToken || existing?.lockToken,
+          statusCode,
+          responseBody,
+          dataPayload
+        );
+      }
+    } catch {}
   }
 
   /**
    * Release lock on failure
    */
   public async releaseLock(key: string, lockToken?: string): Promise<void> {
-    const redisUp = await isRedisAvailable();
-    if (redisUp) {
-      await this.redisLockManager.releaseLock(key, lockToken);
-    }
+    const existing = this.cache.get(key);
+    try {
+      const redisUp = await isRedisAvailable();
+      if (redisUp) {
+        await this.redisLockManager.releaseLock(key, lockToken || existing?.lockToken);
+      }
+    } catch {}
     this.cache.delete(key);
   }
 
@@ -158,7 +175,8 @@ export class IdempotencyManager {
     }
   }
 
-  public clear(): void {
+  public async clear(): Promise<void> {
     this.cache.clear();
+    await this.redisLockManager.clearAll();
   }
 }

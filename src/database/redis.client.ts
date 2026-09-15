@@ -9,11 +9,9 @@ class RedisClientSingleton {
     if (!RedisClientSingleton.instance) {
       const redis = new Redis(config.redis.url, {
         lazyConnect: true,
-        maxRetriesPerRequest: 1,
-        retryStrategy: (times) => {
-          if (times > 3) return null; // Don't hang tests if Redis is offline
-          return Math.min(times * 100, 2000);
-        },
+        maxRetriesPerRequest: 0,
+        enableOfflineQueue: false,
+        retryStrategy: () => null, // Don't loop endlessly when Redis is not running
       });
 
       redis.on('connect', () => {
@@ -32,11 +30,14 @@ class RedisClientSingleton {
   public static async isAvailable(): Promise<boolean> {
     try {
       const client = this.getClient();
-      if (client.status === 'ready' || client.status === 'connect') {
+      if (client.status === 'wait') {
+        await client.connect();
+      }
+      if (client.status === 'ready') {
+        await client.ping();
         return true;
       }
-      await client.connect();
-      return true;
+      return false;
     } catch {
       return false;
     }
