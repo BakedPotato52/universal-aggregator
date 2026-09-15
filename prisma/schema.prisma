@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Transaction {
+  id                String   @id
+  merchantOrderId   String   @unique
+  bankReferenceId   String?  // RRN / UTR
+  bankTransactionId String?  // Bank internal ID
+  amount            Float
+  fee               Float    @default(0.0)
+  tax               Float    @default(0.0)
+  netAmount         Float
+  currency          String   @default("INR")
+  status            String   // INITIATED | PENDING | SUCCESS | FAILED | EXPIRED | REFUNDED
+  method            String   // UPI_QR | UPI_INTENT | UPI_COLLECT
+  bankCode          String   // MOCK | HDFC | ICICI | AXIS
+  merchantVpa       String
+  payerVpa          String?
+  customerName      String?
+  customerEmail     String?
+  customerPhone     String?
+  webhookUrl        String?
+  rawUri            String?
+  metadata          Json?
+  errorCode         String?
+  errorMessage      String?
+  settledAt         DateTime?
+  expiresAt         DateTime
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  history           TransactionHistory[]
+
+  @@index([status])
+  @@index([bankCode])
+  @@index([bankReferenceId])
+  @@index([createdAt])
+}
+
+model TransactionHistory {
+  id            String      @id @default(cuid())
+  transactionId String
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  status        String
+  note          String?
+  rawPayload    Json?
+  timestamp     DateTime    @default(now())
+
+  @@index([transactionId])
+}
+
+model IdempotencyRecord {
+  key          String   @id
+  payloadHash  String
+  status       String   // PROCESSING | COMPLETED | FAILED
+  statusCode   Int?
+  responseBody Json?
+  createdAt    DateTime @default(now())
+  expiresAt    DateTime
+
+  @@index([expiresAt])
+}
+
+model OutboxMessage {
+  id          String    @id
+  eventType   String
+  targetUrl   String
+  payload     Json
+  secretKey   String
+  attempts    Int       @default(0)
+  maxAttempts Int       @default(5)
+  status      String    @default("PENDING") // PENDING | DELIVERED | FAILED
+  lastError   String?
+  nextRetryAt DateTime  @default(now())
+  createdAt   DateTime  @default(now())
+  deliveredAt DateTime?
+
+  @@index([status, nextRetryAt])
+}
+
+model ReconciliationReport {
+  id                     String   @id
+  bankCode               String
+  statementDate          String
+  processedAt            DateTime @default(now())
+  totalRecordsInBankMis  Int
+  totalMatched           Int
+  totalDiscrepancies     Int
+  totalSettledAmount     Float
+  totalDiscrepancyAmount Float
+  items                  Json
+}

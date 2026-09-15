@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universal Aggregator — UPI Direct Engine & Bank Orchestrator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #e6ecf5;
+      --bg-surface: #e6ecf5;
+      --bg-card: #e6ecf5;
+      --shadow-light: #ffffff;
+      --shadow-dark: #b8c4d6;
+      
+      /* Neomorphic shadows */
+      --neu-flat: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+      --neu-flat-sm: 4px 4px 10px var(--shadow-dark), -4px -4px 10px var(--shadow-light);
+      --neu-pressed: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+      --neu-pressed-sm: inset 2px 2px 5px var(--shadow-dark), inset -2px -2px 5px var(--shadow-light);
+      --neu-convex: linear-gradient(145deg, #f6fcff, #cfd8e5);
+      --neu-concave: linear-gradient(145deg, #cfd8e5, #f6fcff);
+
+      /* Colors & Accents */
+      --text-main: #233148;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --accent-blue: #3b82f6;
+      --accent-indigo: #4f46e5;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --accent-cyan: #06b6d4;
+
+      --radius-xl: 20px;
+      --radius-lg: 14px;
+      --radius-md: 10px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding-bottom: 70px;
+    }
+
+    /* HEADER */
+    header {
+      background: var(--bg-surface);
+      box-shadow: 0 4px 16px rgba(184, 196, 214, 0.4);
+      padding: 1.1rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background: var(--bg-surface);
+      box-shadow: var(--neu-flat-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: var(--accent-indigo);
+      font-weight: 800;
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text-main);
+    }
+
+    .brand-subtitle {
+      font-size: 0.78rem;
+      color: var(--accent-indigo);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .header-badges {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .neu-badge {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background: var(--bg-surface);
+      box-shadow: var(--neu-flat-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot-live {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      box-shadow: 0 0 8px var(--accent-green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.6; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.15); }
+      100% { opacity: 0.6; transform: scale(0.9); }
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 1320px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    /* NEOMORPHIC CARD */
+    .neu-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--neu-flat);
+      padding: 1.75rem;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.9rem;
+      border-bottom: 1px solid rgba(184, 196, 214, 0.35);
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: -0.8rem;
+      margin-bottom: 1.25rem;
+    }
+
+    /* GRID LAYOUTS */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 980px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .bank-health-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 860px) {
+      .bank-health-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* BANK HEALTH TILE */
+    .health-tile {
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--neu-flat-sm);
+      padding: 1.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .health-tile:hover {
+      transform: translateY(-2px);
+    }
+
+    .health-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .health-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .health-status {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-green);
+    }
+
+    .health-stat-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .stat-val-green {
+      font-weight: 700;
+      color: var(--accent-green);
+    }
+
+    .stat-val-blue {
+      font-weight: 700;
+      color: var(--accent-indigo);
+    }
+
+    /* NEOMORPHIC TABS */
+    .tabs-nav {
+      display: flex;
+      gap: 1.25rem;
+      padding: 8px;
+      border-radius: var(--radius-lg);
+      background: var(--bg-surface);
+      box-shadow: var(--neu-pressed-sm);
+      width: fit-content;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 10px 22px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      border: none;
+      border-radius: var(--radius-md);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-main);
+    }
+
+    .tab-btn.active {
+      color: var(--accent-indigo);
+      background: var(--bg-surface);
+      box-shadow: var(--neu-flat-sm);
+    }
+
+    /* FORMS & INPUTS */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.825rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    .neu-input, .neu-select, .neu-textarea {
+      width: 100%;
+      background: var(--bg-surface);
+      border: none;
+      outline: none;
+      border-radius: var(--radius-md);
+      box-shadow: var(--neu-pressed);
+      padding: 0.85rem 1.15rem;
+      font-size: 0.92rem;
+      font-family: inherit;
+      color: var(--text-main);
+      transition: box-shadow 0.2s ease;
+    }
+
+    .neu-input:focus, .neu-select:focus, .neu-textarea:focus {
+      box-shadow: inset 4px 4px 10px #adbcd0, inset -4px -4px 10px #ffffff;
+    }
+
+    .neu-select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1.2em;
+    }
+
+    /* BUTTONS */
+    .neu-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0.85rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      font-family: inherit;
+      border: none;
+      border-radius: var(--radius-md);
+      background: var(--bg-surface);
+      box-shadow: var(--neu-flat-sm);
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    .neu-btn:hover {
+      box-shadow: 6px 6px 14px var(--shadow-dark), -6px -6px 14px var(--shadow-light);
+      transform: translateY(-1px);
+    }
+
+    .neu-btn:active {
+      box-shadow: var(--neu-pressed);
+      transform: translateY(1px);
+    }
+
+    .neu-btn-primary {
+      color: #ffffff;
+      background: linear-gradient(135deg, #3b82f6, #4f46e5);
+      box-shadow: 6px 6px 16px rgba(79, 70, 229, 0.35), -6px -6px 16px var(--shadow-light);
+    }
+
+    .neu-btn-primary:hover {
+      background: linear-gradient(135deg, #2563eb, #4338ca);
+      box-shadow: 8px 8px 20px rgba(79, 70, 229, 0.45), -6px -6px 16px var(--shadow-light);
+    }
+
+    .neu-btn-primary:active {
+      box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.25);
+    }
+
+    .neu-btn-success {
+      color: #ffffff;
+      background: linear-gradient(135deg, #10b981, #059669);
+      box-shadow: 6px 6px 16px rgba(16, 185, 129, 0.35), -6px -6px 16px var(--shadow-light);
+    }
+
+    .neu-btn-success:hover {
+      background: linear-gradient(135deg, #059669, #047857);
+      box-shadow: 8px 8px 20px rgba(16, 185, 129, 0.45), -6px -6px 16px var(--shadow-light);
+    }
+
+    .neu-btn-danger {
+      color: var(--accent-rose);
+    }
+
+    .neu-btn-sm {
+      padding: 0.45rem 1rem;
+      font-size: 0.8rem;
+      width: auto;
+    }
+
+    /* QR CODE DISPLAY BOX */
+    .qr-card-inner {
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--neu-flat);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin: 1.25rem 0;
+      position: relative;
+    }
+
+    .qr-frame {
+      background: #ffffff;
+      padding: 1.25rem;
+      border-radius: var(--radius-md);
+      box-shadow: var(--neu-pressed);
+      display: inline-block;
+      margin: 1rem 0;
+    }
+
+    .qr-frame img {
+      width: 210px;
+      height: 210px;
+      display: block;
+      border-radius: 4px;
+    }
+
+    .qr-amount-display {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--accent-indigo);
+      letter-spacing: -0.03em;
+    }
+
+    .qr-vpa-display {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 500;
+      margin-top: 0.2rem;
+    }
+
+    /* INTENT DEEP LINK BUTTONS */
+    .intent-links-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 1rem;
+    }
+
+    .neu-intent-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px;
+      border-radius: var(--radius-md);
+      background: var(--bg-surface);
+      box-shadow: var(--neu-flat-sm);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-main);
+      transition: all 0.2s ease;
+    }
+
+    .neu-intent-btn:hover {
+      box-shadow: 4px 4px 10px var(--shadow-dark), -4px -4px 10px var(--shadow-light);
+      transform: translateY(-2px);
+    }
+
+    .neu-intent-btn:active {
+      box-shadow: var(--neu-pressed-sm);
+      transform: translateY(0);
+    }
+
+    .logo-badge {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    /* STATUS PILLS */
+    .neu-status-pill {
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      box-shadow: var(--neu-flat-sm);
+    }
+
+    .status-SUCCESS {
+      background: rgba(16, 185, 129, 0.18);
+      color: #059669;
+    }
+
+    .status-PENDING {
+      background: rgba(245, 158, 11, 0.18);
+      color: #d97706;
+    }
+
+    .status-FAILED {
+      background: rgba(244, 63, 94, 0.18);
+      color: #e11d48;
+    }
+
+    /* CODE & PAYLOAD INSPECTOR */
+    .neu-code-block {
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--neu-pressed);
+      padding: 1.25rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      color: #1e293b;
+      overflow-x: auto;
+      max-height: 280px;
+      line-height: 1.6;
+    }
+
+    /* TABLES */
+    .table-container {
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--neu-pressed);
+      padding: 1rem;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      text-align: left;
+    }
+
+    th {
+      font-weight: 700;
+      color: var(--text-muted);
+      border-bottom: 2px solid rgba(184, 196, 214, 0.5);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    td {
+      border-bottom: 1px solid rgba(184, 196, 214, 0.3);
+      color: var(--text-main);
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    /* TOAST NOTIFICATION */
+    #toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--bg-surface);
+      box-shadow: var(--neu-flat);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.5rem;
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transform: translateY(120%);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 1000;
+    }
+
+    #toast.show {
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="brand">
+      <div class="brand-icon">⚡</div>
+      <div>
+        <div class="brand-title">Universal Aggregator</div>
+        <div class="brand-subtitle">Direct Acquiring & UPI Switch Core</div>
+      </div>
+    </div>
+    <div class="header-badges">
+      <div class="neu-badge">
+        <span class="dot-live"></span>
+        <span>Engine Active</span>
+      </div>
+      <div class="neu-badge" style="color: var(--accent-indigo);">
+        Direct Nodal Settlement
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- BANK HEALTH SWITCH DASHBOARD -->
+    <div class="neu-card">
+      <div class="card-header">
+        <div class="card-title">
+          <span>🏦</span> Direct Bank Connectors & Real-Time Gateway Switch
+        </div>
+        <button class="neu-btn neu-btn-sm" onclick="loadBankHealth()">↻ Refresh Metrics</button>
+      </div>
+      <div class="bank-health-grid" id="bankHealthGrid">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+
+    <!-- NEOMORPHIC NAVIGATION TABS -->
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="switchTab('tab-checkout', event)">1. Direct UPI Checkout Sandbox</button>
+      <button class="tab-btn" onclick="switchTab('tab-recon', event)">2. 3-Way Auto-Reconciliation</button>
+      <button class="tab-btn" onclick="switchTab('tab-ledger', event)">3. Central Transaction Ledger</button>
+    </div>
+
+    <!-- ==================== TAB 1: CHECKOUT SANDBOX ==================== -->
+    <div id="tab-checkout">
+      <div class="grid-2">
+        
+        <!-- Left: Payment Initiation Form -->
+        <div class="neu-card">
+          <div class="card-header">
+            <div class="card-title"><span>🛒</span> Create Payment Order</div>
+            <button class="neu-btn neu-btn-sm" onclick="resetOrderId()">New Order ID</button>
+          </div>
+          <div class="card-desc">Generate NPCI-compliant Dynamic UPI QR codes and app deep links directly connected to bank nodal accounts.</div>
+
+          <form id="paymentForm" onsubmit="handleCreatePayment(event)">
+            <div class="form-group">
+              <label>Merchant Order ID</label>
+              <input type="text" id="orderId" class="neu-input" required />
+            </div>
+
+            <div class="grid-2" style="gap: 1.25rem;">
+              <div class="form-group">
+                <label>Amount (INR ₹)</label>
+                <input type="number" id="amount" class="neu-input" step="0.5" value="499.00" required />
+              </div>
+              <div class="form-group">
+                <label>Acquiring Bank Connector</label>
+                <select id="bankCode" class="neu-select">
+                  <option value="MOCK">Mock Sandbox (Zero Delay Simulator)</option>
+                  <option value="HDFC">HDFC Bank Direct (SmartHub / UPI)</option>
+                  <option value="ICICI">ICICI Bank Direct (Eazypay)</option>
+                  <option value="AXIS">Axis Bank Direct Gateway</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Order Description</label>
+              <input type="text" id="description" class="neu-input" value="E-Commerce Order Payment" />
+            </div>
+
+            <div class="form-group">
+              <label>Customer UPI VPA (Optional for Collect)</label>
+              <input type="text" id="payerVpa" class="neu-input" placeholder="e.g. customer@okhdfcbank" />
+            </div>
+
+            <button type="submit" class="neu-btn neu-btn-primary" id="createPayBtn" style="margin-top: 0.5rem;">
+              ⚡ Generate Dynamic UPI QR & Intent Links
+            </button>
+          </form>
+        </div>
+
+        <!-- Right: Neomorphic Dynamic QR & Customer Simulator -->
+        <div class="neu-card" id="qrDisplayCard">
+          <div class="card-header">
+            <div class="card-title"><span>📱</span> Customer Payment Terminal</div>
+            <div id="statusBadge" class="neu-status-pill status-PENDING">Ready</div>
+          </div>
+
+          <div id="emptyQrState" style="text-align: center; padding: 4.5rem 1.5rem; color: var(--text-muted);">
+            <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.6;">💳</div>
+            <div style="font-weight: 700; font-size: 1.05rem; color: var(--text-main); margin-bottom: 0.3rem;">No Active Checkout</div>
+            <div>Fill in the order details on the left and click Generate to produce a live Dynamic UPI QR.</div>
+          </div>
+
+          <div id="activeQrState" style="display: none;">
+            <div class="qr-card-inner">
+              <div style="font-size: 0.78rem; font-weight: 800; letter-spacing: 0.08em; color: var(--text-muted); text-transform: uppercase;">Scan & Pay with Any UPI App</div>
+              
+              <div class="qr-frame">
+                <img id="qrImage" src="" alt="Dynamic UPI QR Code" />
+              </div>
+
+              <div class="qr-amount-display" id="displayAmount">₹0.00</div>
+              <div class="qr-vpa-display" id="displayVpa">merchant@hdfcbank</div>
+            </div>
+
+            <label style="margin-top: 1rem;">Mobile App-to-App Intent Links</label>
+            <div class="intent-links-grid">
+              <a href="#" id="intentGPay" class="neu-intent-btn">
+                <span class="logo-badge" style="background:#1a73e8;"></span> Google Pay
+              </a>
+              <a href="#" id="intentPhonePe" class="neu-intent-btn">
+                <span class="logo-badge" style="background:#5f259f;"></span> PhonePe
+              </a>
+              <a href="#" id="intentPaytm" class="neu-intent-btn">
+                <span class="logo-badge" style="background:#00b9f5;"></span> Paytm
+              </a>
+              <a href="#" id="intentCred" class="neu-intent-btn">
+                <span class="logo-badge" style="background:#111111;"></span> CRED
+              </a>
+              <a href="#" id="intentBhim" class="neu-intent-btn">
+                <span class="logo-badge" style="background:#005a9c;"></span> BHIM
+              </a>
+              <a href="#" id="intentGeneric" class="neu-intent-btn">
+                <span class="logo-badge" style="background:#10b981;"></span> Generic UPI
+              </a>
+            </div>
+
+            <div style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid rgba(184, 196, 214, 0.4);">
+              <label>⚡ Bank Simulator (Simulate Customer UPI PIN Approval)</label>
+              <div class="grid-2" style="gap: 12px; margin-top: 0.6rem;">
+                <button class="neu-btn neu-btn-success" onclick="simulatePayment(true)">
+                  ✓ Simulate Success (Fire S2S Callback)
+                </button>
+                <button class="neu-btn neu-btn-danger" onclick="simulatePayment(false)">
+                  ✕ Simulate Bank Decline
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Raw Payload & NPCI URI Inspector -->
+      <div class="neu-card" style="margin-top: 2rem;">
+        <div class="card-header">
+          <div class="card-title"><span>🔍</span> NPCI UPI URI & Bank Checksum Inspector</div>
+          <button class="neu-btn neu-btn-sm" onclick="copyInspectorPayload()">Copy Payload</button>
+        </div>
+        <pre class="neu-code-block" id="payloadInspector">// Payloads and raw NPCI uri string (upi://pay?...) will appear here</pre>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 2: RECONCILIATION ==================== -->
+    <div id="tab-recon" style="display: none;">
+      <div class="neu-card">
+        <div class="card-header">
+          <div class="card-title"><span>📊</span> 3-Way Automated Bank MIS Settlement Matcher</div>
+          <button class="neu-btn neu-btn-sm" onclick="loadSampleMisCsv()">Load Sample MIS Statement</button>
+        </div>
+        <div class="card-desc">
+          Automated daily reconciliation engine matching Acquiring Bank MIS / MT940 dumps against Internal Ledgers. Identifies amount discrepancies, detects unclaimed bank credits, and auto-heals dropped webhooks.
+        </div>
+
+        <div class="form-group">
+          <label>Bank Settlement MIS CSV Dump</label>
+          <textarea id="misCsvContent" class="neu-textarea" rows="6" style="font-family: 'JetBrains Mono', monospace; font-size: 0.82rem;"></textarea>
+        </div>
+
+        <button class="neu-btn neu-btn-primary" style="width: auto; padding: 0.85rem 2rem;" onclick="executeReconciliation()">
+          ⚙ Execute 3-Way Reconciliation Matcher
+        </button>
+
+        <div id="reconResultContainer" style="margin-top: 2rem; display: none;">
+          <div class="card-header" style="margin-top: 1rem;">
+            <div class="card-title">Reconciliation Summary Report</div>
+          </div>
+          <div class="bank-health-grid" style="margin-bottom: 1.5rem;">
+            <div class="health-tile">
+              <div class="health-stat-row">Total MIS Rows</div>
+              <div style="font-size: 1.5rem; font-weight: 800;" id="reconTotal">0</div>
+            </div>
+            <div class="health-tile">
+              <div class="health-stat-row" style="color: var(--accent-green); font-weight: 600;">Reconciled & Matched</div>
+              <div style="font-size: 1.5rem; font-weight: 800; color: var(--accent-green);" id="reconMatched">0</div>
+            </div>
+            <div class="health-tile">
+              <div class="health-stat-row" style="color: var(--accent-rose); font-weight: 600;">Discrepancies / Conflicts</div>
+              <div style="font-size: 1.5rem; font-weight: 800; color: var(--accent-rose);" id="reconDiscrepancies">0</div>
+            </div>
+            <div class="health-tile">
+              <div class="health-stat-row" style="color: var(--accent-indigo); font-weight: 600;">Total Settled Funds</div>
+              <div style="font-size: 1.5rem; font-weight: 800; color: var(--accent-indigo);" id="reconSettled">₹0.00</div>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Merchant Order ID</th>
+                  <th>Bank RRN / UTR</th>
+                  <th>Reconciliation State</th>
+                  <th>Internal Amount</th>
+                  <th>Bank Settled Amount</th>
+                  <th>Audit Analysis</th>
+                </tr>
+              </thead>
+              <tbody id="reconTableBody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 3: TRANSACTION LEDGER ==================== -->
+    <div id="tab-ledger" style="display: none;">
+      <div class="neu-card">
+        <div class="card-header">
+          <div class="card-title"><span>📜</span> Central Transaction Ledger & Audit Trail</div>
+          <button class="neu-btn neu-btn-sm" onclick="loadTransactions()">↻ Refresh Ledger</button>
+        </div>
+        <div class="card-desc">Immutable transaction journal recording every state transition, bank RRN, payer VPA, and nodal account settlement timestamp.</div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Transaction ID</th>
+                <th>Order ID</th>
+                <th>Bank RRN / UTR</th>
+                <th>Amount (INR)</th>
+                <th>Acquiring Bank</th>
+                <th>Status</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody id="ledgerTableBody">
+              <tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading transactions...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast">
+    <span id="toastIcon">✓</span>
+    <span id="toastMessage">Action completed</span>
+  </div>
+
+  <script>
+    let currentTxnId = null;
+    let currentOrderId = null;
+
+    function showToast(message, isError = false) {
+      const toast = document.getElementById('toast');
+      const msg = document.getElementById('toastMessage');
+      const icon = document.getElementById('toastIcon');
+      msg.textContent = message;
+      icon.textContent = isError ? '✕' : '✓';
+      icon.style.color = isError ? 'var(--accent-rose)' : 'var(--accent-green)';
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    function resetOrderId() {
+      document.getElementById('orderId').value = 'ORD_' + Math.floor(100000 + Math.random() * 900000);
+    }
+    resetOrderId();
+
+    function switchTab(tabId, ev) {
+      document.querySelectorAll('.tabs-nav .tab-btn').forEach(t => t.classList.remove('active'));
+      if (ev) ev.target.classList.add('active');
+      document.getElementById('tab-checkout').style.display = tabId === 'tab-checkout' ? 'block' : 'none';
+      document.getElementById('tab-recon').style.display = tabId === 'tab-recon' ? 'block' : 'none';
+      document.getElementById('tab-ledger').style.display = tabId === 'tab-ledger' ? 'block' : 'none';
+
+      if (tabId === 'tab-ledger') loadTransactions();
+      if (tabId === 'tab-recon' && !document.getElementById('misCsvContent').value) loadSampleMisCsv();
+    }
+
+    async function loadBankHealth() {
+      try {
+        const res = await fetch('/api/v1/simulator/bank-health');
+        const json = await res.json();
+        const container = document.getElementById('bankHealthGrid');
+        container.innerHTML = '';
+
+        json.data.forEach(bank => {
+          container.innerHTML += `
+            <div class="health-tile">
+              <div class="health-header">
+                <div class="health-title">${bank.bankCode}</div>
+                <div class="health-status">99.9% Uptime</div>
+              </div>
+              <div class="health-stat-row">
+                <span>Success Rate</span>
+                <span class="stat-val-green">${bank.successRate24h}%</span>
+              </div>
+              <div class="health-stat-row">
+                <span>Avg Latency</span>
+                <span class="stat-val-blue">${bank.avgLatencyMs}ms</span>
+              </div>
+            </div>
+          `;
+        });
+      } catch (e) {
+        console.error('Failed to load bank health', e);
+      }
+    }
+    loadBankHealth();
+
+    async function handleCreatePayment(e) {
+      e.preventDefault();
+      const orderId = document.getElementById('orderId').value;
+      const amount = parseFloat(document.getElementById('amount').value);
+      const bankCode = document.getElementById('bankCode').value;
+      const description = document.getElementById('description').value;
+      const payerVpa = document.getElementById('payerVpa').value || undefined;
+
+      const btn = document.getElementById('createPayBtn');
+      btn.innerText = 'Connecting to Bank...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/v1/payments/upi/qr', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Idempotency-Key': orderId,
+          },
+          body: JSON.stringify({
+            merchantOrderId: orderId,
+            amount,
+            preferredBank: bankCode,
+            description,
+            payerVpa,
+          }),
+        });
+
+        const json = await res.json();
+        document.getElementById('payloadInspector').textContent = JSON.stringify(json, null, 2);
+
+        if (json.success) {
+          currentTxnId = json.data.transactionId;
+          currentOrderId = json.data.merchantOrderId;
+
+          document.getElementById('emptyQrState').style.display = 'none';
+          document.getElementById('activeQrState').style.display = 'block';
+          document.getElementById('qrImage').src = json.data.upi.qrDataUrl;
+          document.getElementById('displayAmount').textContent = `₹${json.data.amount.toFixed(2)}`;
+          document.getElementById('displayVpa').textContent = json.data.upi.payeeVpa;
+
+          const statusBadge = document.getElementById('statusBadge');
+          statusBadge.textContent = json.data.status;
+          statusBadge.className = `neu-status-pill status-${json.data.status}`;
+
+          // Also generate mobile App Intent links
+          const intentRes = await fetch('/api/v1/payments/upi/intent', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              merchantOrderId: orderId,
+              amount,
+              preferredBank: bankCode,
+              description,
+            }),
+          });
+          const intentJson = await intentRes.json();
+          if (intentJson.success) {
+            const links = intentJson.data.intentLinks;
+            document.getElementById('intentGPay').href = links.gpay;
+            document.getElementById('intentPhonePe').href = links.phonepe;
+            document.getElementById('intentPaytm').href = links.paytm;
+            document.getElementById('intentCred').href = links.cred;
+            document.getElementById('intentBhim').href = links.bhim;
+            document.getElementById('intentGeneric').href = links.genericUpi;
+          }
+
+          showToast('Dynamic UPI QR Generated Successfully!');
+        } else {
+          showToast(json.message || 'Payment creation failed', true);
+        }
+      } catch (err) {
+        showToast('Payment creation failed: ' + err.message, true);
+      } finally {
+        btn.innerText = '⚡ Generate Dynamic UPI QR & Intent Links';
+        btn.disabled = false;
+      }
+    }
+
+    async function simulatePayment(isSuccess) {
+      if (!currentTxnId) return;
+
+      try {
+        const res = await fetch('/api/v1/simulator/pay', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            transactionId: currentTxnId,
+            merchantOrderId: currentOrderId,
+            simulateFailure: !isSuccess,
+          }),
+        });
+
+        const json = await res.json();
+        document.getElementById('payloadInspector').textContent = JSON.stringify(json, null, 2);
+
+        if (json.success && json.transaction) {
+          const status = json.transaction.status;
+          const statusBadge = document.getElementById('statusBadge');
+          statusBadge.textContent = status;
+          statusBadge.className = `neu-status-pill status-${status}`;
+
+          if (status === 'SUCCESS') {
+            showToast(`Payment Confirmed via S2S Webhook! RRN: ${json.transaction.bankReferenceId}`);
+          } else {
+            showToast('Bank Declined Payment', true);
+          }
+        }
+      } catch (e) {
+        showToast('Simulation error: ' + e.message, true);
+      }
+    }
+
+    async function loadTransactions() {
+      try {
+        const res = await fetch('/api/v1/payments');
+        const json = await res.json();
+        const tbody = document.getElementById('ledgerTableBody');
+        tbody.innerHTML = '';
+
+        if (json.data.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2.5rem;">No transactions recorded in ledger yet.</td></tr>';
+          return;
+        }
+
+        json.data.forEach(txn => {
+          tbody.innerHTML += `
+            <tr>
+              <td><code style="font-weight:600; color:var(--accent-indigo);">${txn.id}</code></td>
+              <td><strong>${txn.merchantOrderId}</strong></td>
+              <td>${txn.bankReferenceId ? `<span style="font-family:'JetBrains Mono', monospace; font-size:0.8rem;">${txn.bankReferenceId}</span>` : '<span style="color:var(--text-light)">Pending</span>'}</td>
+              <td><strong>₹${txn.amount.toFixed(2)}</strong></td>
+              <td><span class="neu-badge" style="font-size:0.75rem; padding:3px 10px;">${txn.bankCode}</span></td>
+              <td><span class="neu-status-pill status-${txn.status}">${txn.status}</span></td>
+              <td style="color: var(--text-muted); font-size: 0.8rem;">${new Date(txn.createdAt).toLocaleTimeString()}</td>
+            </tr>
+          `;
+        });
+      } catch (e) {
+        console.error('Failed to load ledger', e);
+      }
+    }
+
+    function loadSampleMisCsv() {
+      const order = currentOrderId || 'ORD_SAMPLE_101';
+      const sample = `MerchantOrderId,BankReferenceId,Amount,Fee,Tax,NetSettledAmount,Status,SettlementDate,PayerVpa
+${order},RRN_SETTLE_9901,499.00,0.00,0.00,499.00,SUCCESS,2026-09-15,customer@okhdfcbank
+ORD_MISMATCH_202,RRN_SETTLE_9902,1500.00,0.00,0.00,1500.00,SUCCESS,2026-09-15,user@okaxis
+ORD_UNCLAIMED_303,RRN_SETTLE_9903,320.00,0.00,0.00,320.00,SUCCESS,2026-09-15,payer@icici`;
+      document.getElementById('misCsvContent').value = sample;
+      showToast('Loaded sample bank settlement statement');
+    }
+
+    async function executeReconciliation() {
+      const csv = document.getElementById('misCsvContent').value;
+      if (!csv) return showToast('Please enter or load CSV content', true);
+
+      try {
+        const res = await fetch('/api/v1/reconciliation/reconcile-csv', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ csvContent: csv, bankCode: 'MOCK', autoHealPending: true }),
+        });
+
+        const json = await res.json();
+        if (json.success) {
+          const r = json.data;
+          document.getElementById('reconResultContainer').style.display = 'block';
+          document.getElementById('reconTotal').textContent = r.totalRecordsInBankMis;
+          document.getElementById('reconMatched').textContent = r.totalMatched;
+          document.getElementById('reconDiscrepancies').textContent = r.totalDiscrepancies;
+          document.getElementById('reconSettled').textContent = `₹${r.totalSettledAmount.toFixed(2)}`;
+
+          const tbody = document.getElementById('reconTableBody');
+          tbody.innerHTML = '';
+
+          r.items.forEach(item => {
+            const statusClass = item.matchStatus === 'MATCHED' ? 'status-SUCCESS' : 'status-FAILED';
+            tbody.innerHTML += `
+              <tr>
+                <td><strong>${item.merchantOrderId}</strong></td>
+                <td><span style="font-family:'JetBrains Mono', monospace; font-size:0.8rem;">${item.bankReferenceId || '-'}</span></td>
+                <td><span class="neu-status-pill ${statusClass}">${item.matchStatus}</span></td>
+                <td>${item.internalAmount !== undefined ? '₹' + item.internalAmount.toFixed(2) : '-'}</td>
+                <td>${item.bankAmount !== undefined ? '₹' + item.bankAmount.toFixed(2) : '-'}</td>
+                <td style="font-size: 0.82rem; color: ${item.matchStatus === 'MATCHED' ? '#059669' : '#e11d48'};">
+                  ${item.discrepancyNote || 'Reconciled with 100% nodal account credit match'}
+                </td>
+              </tr>
+            `;
+          });
+
+          showToast(`Reconciliation finished: ${r.totalMatched} matched, ${r.totalDiscrepancies} flagged`);
+        } else {
+          showToast(json.message || 'Reconciliation failed', true);
+        }
+      } catch (e) {
+        showToast('Reconciliation error: ' + e.message, true);
+      }
+    }
+
+    function copyInspectorPayload() {
+      const text = document.getElementById('payloadInspector').textContent;
+      navigator.clipboard.writeText(text);
+      showToast('Payload copied to clipboard!');
+    }
+  </script>
+</body>
+</html>

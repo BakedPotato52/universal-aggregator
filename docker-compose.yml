@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  # ==========================================
+  # PostgreSQL 16 - Enterprise ACID Ledger DB
+  # ==========================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: aggregator-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: universal_aggregator
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d universal_aggregator"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - aggregator-network
+
+  # ==========================================
+  # Redis 7 - Distributed Idempotency & Locks
+  # ==========================================
+  redis:
+    image: redis:7-alpine
+    container_name: aggregator-redis
+    restart: always
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - aggregator-network
+
+  # ==========================================
+  # Universal Payment Aggregator App
+  # ==========================================
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aggregator-core
+    restart: always
+    environment:
+      PORT: 3000
+      HOST: 0.0.0.0
+      NODE_ENV: production
+      DATABASE_URL: postgresql://postgres:postgrespassword@postgres:5432/universal_aggregator?schema=public
+      REDIS_URL: redis://redis:6379
+      DEFAULT_BANK_ROUTING: MOCK
+      MERCHANT_NAME: "Universal Merchant Pvt Ltd"
+      DEFAULT_UPI_VPA: "merchant@hdfcbank"
+      DEFAULT_MCC: "5411"
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - aggregator-network
+
+volumes:
+  pgdata:
+    driver: local
+  redisdata:
+    driver: local
+
+networks:
+  aggregator-network:
+    driver: bridge
