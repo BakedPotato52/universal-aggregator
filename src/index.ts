@@ -17,7 +17,8 @@ async function main() {
   • Status: Online
   • Environment: ${config.nodeEnv}
   • Server listening at: http://${config.host}:${config.port}
-  • Interactive Sandbox Demo: http://localhost:${config.port}/demo/index.html
+  • 🛍️ Flagship E-Commerce Store: http://localhost:${config.port}/store/index.html
+  • ⚙️ Developer Aggregator Sandbox: http://localhost:${config.port}/index.html
   • Health Check: http://localhost:${config.port}/health
 =============================================================
   Acquiring Bank Integrations:

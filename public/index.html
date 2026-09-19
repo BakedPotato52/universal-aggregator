@@ -515,6 +515,196 @@
       color: #e11d48;
     }
 
+    /* PAYMENT SUCCESS ANIMATIONS & UI */
+    .success-container {
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--neu-flat);
+      padding: 2rem 1.75rem;
+      text-align: center;
+      animation: fadeInSlide 0.4s ease-out forwards;
+    }
+
+    @keyframes fadeInSlide {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .success-icon-wrapper {
+      position: relative;
+      width: 88px;
+      height: 88px;
+      margin: 0 auto 1.25rem;
+      border-radius: 50%;
+      background: var(--bg-surface);
+      box-shadow: var(--neu-flat);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .success-pulse-ring {
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 2px solid rgba(16, 185, 129, 0.45);
+      animation: pulseOut 2s infinite ease-out;
+    }
+
+    @keyframes pulseOut {
+      0% { transform: scale(0.95); opacity: 0.9; }
+      100% { transform: scale(1.35); opacity: 0; }
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .success-svg {
+      width: 52px;
+      height: 52px;
+    }
+
+    .svg-circle {
+      stroke-dasharray: 166;
+      stroke-dashoffset: 166;
+      stroke-width: 3.5;
+      stroke-miterlimit: 10;
+      stroke: #10b981;
+      fill: none;
+      animation: drawCircle 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+    }
+
+    .svg-check {
+      transform-origin: 50% 50%;
+      stroke-dasharray: 48;
+      stroke-dashoffset: 48;
+      stroke-width: 4;
+      stroke: #10b981;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      animation: drawCheck 0.4s cubic-bezier(0.65, 0, 0.45, 1) 0.5s forwards;
+    }
+
+    @keyframes drawCircle {
+      100% { stroke-dashoffset: 0; }
+    }
+
+    @keyframes drawCheck {
+      100% { stroke-dashoffset: 0; }
+    }
+
+    .success-heading {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #059669;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.25rem;
+    }
+
+    .success-subheading {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+    }
+
+    .success-amount-pill {
+      display: inline-block;
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.03em;
+      margin-bottom: 1.25rem;
+    }
+
+    .receipt-card {
+      background: var(--bg-surface);
+      border-radius: var(--radius-md);
+      box-shadow: var(--neu-pressed);
+      padding: 1.25rem 1.5rem;
+      text-align: left;
+      margin-bottom: 1.5rem;
+    }
+
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px dashed rgba(184, 196, 214, 0.45);
+      font-size: 0.85rem;
+    }
+
+    .receipt-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .receipt-label {
+      color: var(--text-muted);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .receipt-value {
+      font-weight: 700;
+      color: var(--text-main);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+    }
+
+    /* FAILED STATE STYLING */
+    .failed-icon-wrapper {
+      position: relative;
+      width: 88px;
+      height: 88px;
+      margin: 0 auto 1.25rem;
+      border-radius: 50%;
+      background: var(--bg-surface);
+      box-shadow: var(--neu-flat);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .failed-pulse-ring {
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 2px solid rgba(244, 63, 94, 0.45);
+      animation: pulseOut 2s infinite ease-out;
+    }
+
+    .failed-svg {
+      width: 52px;
+      height: 52px;
+    }
+
+    .svg-cross-circle {
+      stroke-dasharray: 166;
+      stroke-dashoffset: 166;
+      stroke-width: 3.5;
+      stroke: #f43f5e;
+      fill: none;
+      animation: drawCircle 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+    }
+
+    .svg-cross-line {
+      stroke-dasharray: 48;
+      stroke-dashoffset: 48;
+      stroke-width: 4;
+      stroke: #f43f5e;
+      stroke-linecap: round;
+      fill: none;
+      animation: drawCheck 0.4s cubic-bezier(0.65, 0, 0.45, 1) 0.5s forwards;
+    }
+
     /* CODE & PAYLOAD INSPECTOR */
     .neu-code-block {
       background: var(--bg-surface);
@@ -696,12 +886,14 @@
             <div id="statusBadge" class="neu-status-pill status-PENDING">Ready</div>
           </div>
 
+          <!-- 1. EMPTY STATE -->
           <div id="emptyQrState" style="text-align: center; padding: 4.5rem 1.5rem; color: var(--text-muted);">
-            <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.6;">💳</div>
+            <div style="font-size: 3.2rem; margin-bottom: 1rem; opacity: 0.7;">💳</div>
             <div style="font-weight: 700; font-size: 1.05rem; color: var(--text-main); margin-bottom: 0.3rem;">No Active Checkout</div>
             <div>Fill in the order details on the left and click Generate to produce a live Dynamic UPI QR.</div>
           </div>
 
+          <!-- 2. ACTIVE QR & INTENT CHECKOUT STATE -->
           <div id="activeQrState" style="display: none;">
             <div class="qr-card-inner">
               <div style="font-size: 0.78rem; font-weight: 800; letter-spacing: 0.08em; color: var(--text-muted); text-transform: uppercase;">Scan & Pay with Any UPI App</div>
@@ -748,6 +940,91 @@
               </div>
             </div>
           </div>
+
+          <!-- 3. ANIMATED PAYMENT SUCCESS STATE -->
+          <div id="successState" style="display: none;">
+            <div class="success-container">
+              
+              <!-- Animated Success SVG Circle & Checkmark -->
+              <div class="success-icon-wrapper">
+                <div class="success-pulse-ring"></div>
+                <svg class="success-svg" viewBox="0 0 52 52">
+                  <circle class="svg-circle" cx="26" cy="26" r="23" />
+                  <path class="svg-check" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                </svg>
+              </div>
+
+              <div class="success-heading">Payment Successful!</div>
+              <div class="success-subheading">Funds settled directly into company current account</div>
+
+              <div class="success-amount-pill" id="successAmountDisplay">₹499.00</div>
+
+              <!-- Transaction Receipt Breakdown -->
+              <div class="receipt-card">
+                <div class="receipt-row">
+                  <span class="receipt-label">📋 Merchant Order ID</span>
+                  <span class="receipt-value" id="receiptOrderId">-</span>
+                </div>
+                <div class="receipt-row">
+                  <span class="receipt-label">🏦 Bank Reference No (RRN)</span>
+                  <span class="receipt-value" style="color: var(--accent-indigo);" id="receiptRrn">-</span>
+                </div>
+                <div class="receipt-row">
+                  <span class="receipt-label">⚡ Direct Acquiring Bank</span>
+                  <span class="receipt-value" id="receiptBank">-</span>
+                </div>
+                <div class="receipt-row">
+                  <span class="receipt-label">👤 Payer UPI VPA</span>
+                  <span class="receipt-value" id="receiptPayerVpa">-</span>
+                </div>
+                <div class="receipt-row">
+                  <span class="receipt-label">🛡️ Settlement Status</span>
+                  <span class="receipt-value" style="color: #059669;">Direct Nodal T+0 (0% Intermediary Fee)</span>
+                </div>
+                <div class="receipt-row">
+                  <span class="receipt-label">🕒 Timestamp</span>
+                  <span class="receipt-value" id="receiptTimestamp">-</span>
+                </div>
+              </div>
+
+              <div class="grid-2" style="gap: 12px;">
+                <button class="neu-btn neu-btn-primary" onclick="copyReceiptDetails()">
+                  📋 Copy Receipt Details
+                </button>
+                <button class="neu-btn" onclick="startNewCheckout()">
+                  + Create Another Order
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. ANIMATED PAYMENT DECLINED STATE -->
+          <div id="failedState" style="display: none;">
+            <div class="success-container">
+              
+              <!-- Animated Cross Indicator -->
+              <div class="failed-icon-wrapper">
+                <div class="failed-pulse-ring"></div>
+                <svg class="failed-svg" viewBox="0 0 52 52">
+                  <circle class="svg-cross-circle" cx="26" cy="26" r="23" />
+                  <path class="svg-cross-line" d="M16 16 L36 36 M36 16 L16 36" />
+                </svg>
+              </div>
+
+              <div class="success-heading" style="color: var(--accent-rose);">Payment Declined</div>
+              <div class="success-subheading" id="failedReasonDisplay">Transaction was declined by acquiring bank switch</div>
+
+              <div class="grid-2" style="gap: 12px; margin-top: 1.5rem;">
+                <button class="neu-btn neu-btn-primary" onclick="retryPayment()">
+                  ↻ Reopen QR / Retry
+                </button>
+                <button class="neu-btn" onclick="startNewCheckout()">
+                  Cancel & New Order
+                </button>
+              </div>
+            </div>
+          </div>
+
         </div>
 
       </div>
@@ -960,8 +1237,12 @@
           currentTxnId = json.data.transactionId;
           currentOrderId = json.data.merchantOrderId;
 
+          // Transition to active checkout state
           document.getElementById('emptyQrState').style.display = 'none';
+          document.getElementById('successState').style.display = 'none';
+          document.getElementById('failedState').style.display = 'none';
           document.getElementById('activeQrState').style.display = 'block';
+
           document.getElementById('qrImage').src = json.data.upi.qrDataUrl;
           document.getElementById('displayAmount').textContent = `₹${json.data.amount.toFixed(2)}`;
           document.getElementById('displayVpa').textContent = json.data.upi.payeeVpa;
@@ -970,31 +1251,33 @@
           statusBadge.textContent = json.data.status;
           statusBadge.className = `neu-status-pill status-${json.data.status}`;
 
-          // Also generate mobile App Intent links
-          const intentRes = await fetch('/api/v1/payments/upi/intent', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              merchantOrderId: orderId,
-              amount,
-              preferredBank: bankCode,
-              description,
-            }),
-          });
-          const intentJson = await intentRes.json();
-          if (intentJson.success) {
-            const links = intentJson.data.intentLinks;
-            document.getElementById('intentGPay').href = links.gpay;
-            document.getElementById('intentPhonePe').href = links.phonepe;
-            document.getElementById('intentPaytm').href = links.paytm;
-            document.getElementById('intentCred').href = links.cred;
-            document.getElementById('intentBhim').href = links.bhim;
-            document.getElementById('intentGeneric').href = links.genericUpi;
-          }
+          // Populate mobile App Intent links defensively
+          const rawUri = (json && json.data && json.data.upi && json.data.upi.rawUri) || (json && json.data && json.data.rawUri) || '';
+          const queryString = rawUri ? rawUri.replace('upi://pay?', '') : '';
+          const links = (json && json.data && json.data.intentLinks) || {
+            genericUpi: rawUri || '#',
+            gpay: queryString ? `tez://upi/pay?${queryString}` : '#',
+            phonepe: queryString ? `phonepe://pay?${queryString}` : '#',
+            paytm: queryString ? `paytmmp://pay?${queryString}` : '#',
+            cred: queryString ? `cred://upi/pay?${queryString}` : '#',
+            bhim: queryString ? `bhim://pay?${queryString}` : '#',
+          };
+
+          const setHref = (id, url) => {
+            const el = document.getElementById(id);
+            if (el) el.href = url || '#';
+          };
+
+          setHref('intentGPay', links?.gpay);
+          setHref('intentPhonePe', links?.phonepe);
+          setHref('intentPaytm', links?.paytm);
+          setHref('intentCred', links?.cred);
+          setHref('intentBhim', links?.bhim);
+          setHref('intentGeneric', links?.genericUpi || rawUri);
 
           showToast('Dynamic UPI QR Generated Successfully!');
         } else {
-          showToast(json.message || 'Payment creation failed', true);
+          showToast((json && json.message) || 'Payment creation failed', true);
         }
       } catch (err) {
         showToast('Payment creation failed: ' + err.message, true);
@@ -1015,6 +1298,7 @@
             transactionId: currentTxnId,
             merchantOrderId: currentOrderId,
             simulateFailure: !isSuccess,
+            failureReason: isSuccess ? undefined : 'Customer entered incorrect UPI PIN / Insufficient balance',
           }),
         });
 
@@ -1022,20 +1306,75 @@
         document.getElementById('payloadInspector').textContent = JSON.stringify(json, null, 2);
 
         if (json.success && json.transaction) {
-          const status = json.transaction.status;
+          const t = json.transaction;
+          const status = t.status;
           const statusBadge = document.getElementById('statusBadge');
           statusBadge.textContent = status;
           statusBadge.className = `neu-status-pill status-${status}`;
 
           if (status === 'SUCCESS') {
-            showToast(`Payment Confirmed via S2S Webhook! RRN: ${json.transaction.bankReferenceId}`);
+            // Populate and show Animated Success Screen & Receipt
+            document.getElementById('activeQrState').style.display = 'none';
+            document.getElementById('failedState').style.display = 'none';
+            document.getElementById('emptyQrState').style.display = 'none';
+
+            document.getElementById('successAmountDisplay').textContent = `₹${t.amount.toFixed(2)}`;
+            document.getElementById('receiptOrderId').textContent = t.merchantOrderId;
+            document.getElementById('receiptRrn').textContent = t.bankReferenceId || 'RRN' + Date.now();
+            document.getElementById('receiptBank').textContent = `${t.bankCode} Direct Acquiring Switch`;
+            document.getElementById('receiptPayerVpa').textContent = t.payerVpa || 'customer@okhdfcbank';
+            document.getElementById('receiptTimestamp').textContent = new Date(t.settledAt || t.updatedAt).toLocaleString();
+
+            document.getElementById('successState').style.display = 'block';
+            showToast(`✓ Payment Confirmed! Settled via ${t.bankCode} Direct Switch`);
           } else {
+            // Show Animated Decline Screen
+            document.getElementById('activeQrState').style.display = 'none';
+            document.getElementById('successState').style.display = 'none';
+            document.getElementById('emptyQrState').style.display = 'none';
+
+            document.getElementById('failedReasonDisplay').textContent = t.errorMessage || 'Transaction declined by bank switch';
+            document.getElementById('failedState').style.display = 'block';
             showToast('Bank Declined Payment', true);
           }
         }
       } catch (e) {
         showToast('Simulation error: ' + e.message, true);
       }
+    }
+
+    function retryPayment() {
+      document.getElementById('failedState').style.display = 'none';
+      document.getElementById('activeQrState').style.display = 'block';
+      const statusBadge = document.getElementById('statusBadge');
+      statusBadge.textContent = 'PENDING';
+      statusBadge.className = 'neu-status-pill status-PENDING';
+    }
+
+    function startNewCheckout() {
+      resetOrderId();
+      document.getElementById('successState').style.display = 'none';
+      document.getElementById('failedState').style.display = 'none';
+      document.getElementById('activeQrState').style.display = 'none';
+      document.getElementById('emptyQrState').style.display = 'block';
+      const statusBadge = document.getElementById('statusBadge');
+      statusBadge.textContent = 'Ready';
+      statusBadge.className = 'neu-status-pill status-PENDING';
+      currentTxnId = null;
+      currentOrderId = null;
+    }
+
+    function copyReceiptDetails() {
+      const order = document.getElementById('receiptOrderId').textContent;
+      const rrn = document.getElementById('receiptRrn').textContent;
+      const amount = document.getElementById('successAmountDisplay').textContent;
+      const bank = document.getElementById('receiptBank').textContent;
+      const vpa = document.getElementById('receiptPayerVpa').textContent;
+      const time = document.getElementById('receiptTimestamp').textContent;
+
+      const receiptText = `=== PAYMENT RECEIPT ===\nOrder ID: ${order}\nAmount: ${amount}\nBank RRN: ${rrn}\nBank: ${bank}\nPayer: ${vpa}\nStatus: Settled (Direct Nodal T+0)\nDate: ${time}\n=======================`;
+      navigator.clipboard.writeText(receiptText);
+      showToast('Receipt copied to clipboard!');
     }
 
     async function loadTransactions() {

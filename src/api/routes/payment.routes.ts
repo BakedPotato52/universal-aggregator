@@ -105,6 +105,18 @@ export async function paymentRoutes(server: FastifyInstance) {
         size: 320,
       });
 
+      // Pre-compute App Intent deep links
+      const intentResult = UpiIntentBuilder.generateLinks({
+        pa: merchantVpa,
+        pn: config.merchant.name,
+        mc: config.merchant.defaultMcc,
+        tr: txnRecord.id,
+        tn: body.description || `Order #${body.merchantOrderId}`,
+        am: body.amount,
+        cu: 'INR',
+        mode: '04',
+      });
+
       // Update ledger with generated URI and Bank Txn ID
       txnService.updateStatus(txnRecord.id, 'PENDING', {
         bankTransactionId: bankResult.bankTransactionId,
@@ -132,6 +144,15 @@ export async function paymentRoutes(server: FastifyInstance) {
             payeeVpa: qrResult.payeeVpa,
             payeeName: config.merchant.name,
             expiresAt: qrResult.expiresAt,
+          },
+          intentLinks: {
+            genericUpi: intentResult.genericUpiUri,
+            gpay: intentResult.gpayUri,
+            phonepe: intentResult.phonepeUri,
+            paytm: intentResult.paytmUri,
+            cred: intentResult.credUri,
+            bhim: intentResult.bhimUri,
+            webIntent: intentResult.webIntentUrl,
           },
           createdAt: txnRecord.createdAt,
         },

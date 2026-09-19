@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmation & Tax Invoice — AuraSound Flagship</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #090c13;
+      --bg-card: #111622;
+      --bg-card-sub: #171e2e;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(59, 130, 246, 0.3);
+      
+      --accent-primary: #3b82f6;
+      --accent-cyan: #06b6d4;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    header {
+      background: rgba(9, 12, 19, 0.9);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-cyan));
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+
+    .brand-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 40px auto;
+      padding: 0 24px;
+    }
+
+    /* Success Header Banner */
+    .success-hero {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.05));
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      text-align: center;
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .check-icon-badge {
+      width: 64px;
+      height: 64px;
+      background: var(--accent-green);
+      color: #fff;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin-bottom: 16px;
+      box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
+    }
+
+    .order-title {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .order-sub {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .order-id-chip {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-subtle);
+      padding: 6px 16px;
+      border-radius: var(--radius-full);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-top: 14px;
+      color: var(--accent-cyan);
+    }
+
+    /* Stepper Timeline */
+    .timeline-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 24px 32px;
+      margin-bottom: 30px;
+    }
+
+    .timeline-steps {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin-top: 10px;
+    }
+
+    .timeline-steps::before {
+      content: '';
+      position: absolute;
+      top: 16px;
+      left: 30px;
+      right: 30px;
+      height: 3px;
+      background: var(--bg-card-sub);
+      z-index: 1;
+    }
+
+    .step-item {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 8px;
+    }
+
+    .step-dot {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--bg-card-sub);
+      border: 3px solid var(--bg-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-dim);
+    }
+
+    .step-item.active .step-dot {
+      background: var(--accent-green);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
+    }
+
+    .step-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .step-item.active .step-label {
+      color: #fff;
+    }
+
+    /* 2 Column Details Grid */
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+
+    .card-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 24px;
+    }
+
+    .card-heading {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Invoice Table */
+    .invoice-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+    }
+
+    .invoice-table th {
+      text-align: left;
+      color: var(--text-dim);
+      font-weight: 600;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-subtle);
+      text-transform: uppercase;
+      font-size: 0.72rem;
+    }
+
+    .invoice-table td {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-main);
+    }
+
+    .invoice-table .amount-col {
+      text-align: right;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+    }
+
+    .invoice-calc-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .invoice-calc-row.total {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 10px;
+      margin-top: 8px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Payment & Tracking Audit Trail */
+    .audit-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 0.82rem;
+    }
+
+    .audit-row {
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-card-sub);
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .audit-label {
+      color: var(--text-dim);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .audit-val {
+      color: #fff;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      word-break: break-all;
+    }
+
+    /* Actions Bar */
+    .actions-bar {
+      display: flex;
+      gap: 16px;
+      justify-content: flex-end;
+    }
+
+    .btn-action {
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-print {
+      background: var(--bg-card-sub);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+    }
+
+    .btn-print:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-home {
+      background: var(--accent-primary);
+      border: none;
+      color: #fff;
+    }
+
+    .btn-home:hover {
+      filter: brightness(1.1);
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background: #fff !important;
+        color: #000 !important;
+      }
+      header, .actions-bar, .timeline-card {
+        display: none !important;
+      }
+      .card-box, .success-hero {
+        border: 1px solid #ccc !important;
+        background: #fff !important;
+        color: #000 !important;
+      }
+      .audit-row {
+        background: #f8f9fa !important;
+        color: #000 !important;
+        border: 1px solid #eee !important;
+      }
+      .audit-val, .card-heading, .order-title {
+        color: #000 !important;
+      }
+    }
+
+    @media (max-width: 800px) {
+      .details-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="/store/index.html" class="brand">
+      <div class="brand-logo">A</div>
+      <div class="brand-name">AURASOUND</div>
+    </a>
+    <div style="font-size:0.85rem; color:var(--text-muted);">
+      <span>Official Tax Invoice & Receipt</span>
+    </div>
+  </header>
+
+  <div class="container" id="mainContainer">
+    
+    <!-- Hero Confirmation -->
+    <div class="success-hero">
+      <div class="check-icon-badge">✓</div>
+      <h1 class="order-title">Thank You, Your Order is Confirmed!</h1>
+      <p class="order-sub">We've received your payment via Universal Aggregator and your shipment is being prepared.</p>
+      <div class="order-id-chip" id="dispOrderId">ORD_AURA_LOADING...</div>
+    </div>
+
+    <!-- Live Fulfillment Stepper -->
+    <div class="timeline-card">
+      <div style="font-size:0.85rem; font-weight:700; color:var(--text-muted); margin-bottom:12px;">
+        ESTIMATED DELIVERY: <span style="color:#fff;" id="dispEstimatedDelivery">3 Business Days</span>
+      </div>
+      <div class="timeline-steps">
+        <div class="step-item active">
+          <div class="step-dot">1</div>
+          <div class="step-label">Order Placed</div>
+        </div>
+        <div class="step-item active">
+          <div class="step-dot">2</div>
+          <div class="step-label">Payment Verified</div>
+        </div>
+        <div class="step-item active">
+          <div class="step-dot">3</div>
+          <div class="step-label">In Warehouse</div>
+        </div>
+        <div class="step-item">
+          <div class="step-dot">4</div>
+          <div class="step-label">Dispatched</div>
+        </div>
+        <div class="step-item">
+          <div class="step-dot">5</div>
+          <div class="step-label">Delivered</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2-Column Grid -->
+    <div class="details-grid">
+      
+      <!-- Tax Invoice & Items -->
+      <div class="card-box">
+        <div class="card-heading">
+          <span>🧾 Tax Invoice Breakdown</span>
+          <span style="font-size:0.75rem; color:var(--accent-green); font-weight:700;">PAID IN FULL</span>
+        </div>
+
+        <table class="invoice-table">
+          <thead>
+            <tr>
+              <th>Item Description</th>
+              <th>Qty</th>
+              <th class="amount-col">Amount</th>
+            </tr>
+          </thead>
+          <tbody id="invoiceItemsTbody">
+            <tr>
+              <td>
+                <strong>AuraSound Apex 9</strong><br>
+                <span style="font-size:0.75rem; color:var(--text-muted);" id="dispItemVariant">Obsidian Black</span>
+              </td>
+              <td>1</td>
+              <td class="amount-col" id="dispItemPrice">₹14,999</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Calculations -->
+        <div class="invoice-calc-row">
+          <span>Subtotal</span>
+          <span id="dispSubtotal">₹14,999</span>
+        </div>
+        <div class="invoice-calc-row" id="dispAddonsRow">
+          <span>Selected Accessories</span>
+          <span id="dispAddonsTotal">₹1,999</span>
+        </div>
+        <div class="invoice-calc-row" style="color:var(--accent-green);" id="dispDiscountRow">
+          <span id="dispDiscountLabel">Discount (AURA10)</span>
+          <span id="dispDiscount">-₹1,700</span>
+        </div>
+        <div class="invoice-calc-row">
+          <span>Taxable Amount</span>
+          <span id="dispTaxable">₹12,964.41</span>
+        </div>
+        <div class="invoice-calc-row">
+          <span>CGST (9%)</span>
+          <span id="dispCgst">₹1,166.80</span>
+        </div>
+        <div class="invoice-calc-row">
+          <span>SGST (9%)</span>
+          <span id="dispSgst">₹1,166.80</span>
+        </div>
+        <div class="invoice-calc-row">
+          <span>Shipping (BlueDart Express Air)</span>
+          <span style="color:var(--accent-green);">FREE</span>
+        </div>
+        <div class="invoice-calc-row total">
+          <span>Grand Total Paid</span>
+          <span id="dispGrandTotal">₹15,298</span>
+        </div>
+      </div>
+
+      <!-- Shipping & Bank Transaction Audit -->
+      <div style="display:flex; flex-direction:column; gap:20px;">
+        
+        <!-- Delivery Address -->
+        <div class="card-box">
+          <div class="card-heading">
+            <span>📦 Shipping Address</span>
+          </div>
+          <div style="font-size:0.85rem; line-height:1.6;" id="dispShippingAddress">
+            <strong id="dispCustName">Aarav Patel</strong><br>
+            <span id="dispCustAddress">Villa 14, Palm Meadows, Whitefield</span><br>
+            <span id="dispCustCity">Bengaluru, Karnataka - 560066</span><br>
+            <span style="color:var(--text-muted);">Phone: </span><span id="dispCustPhone">9820198201</span><br>
+            <span style="color:var(--text-muted);">Email: </span><span id="dispCustEmail">aarav.patel@gmail.com</span>
+          </div>
+          <div style="margin-top:14px; padding-top:10px; border-top:1px solid var(--border-subtle); font-size:0.75rem; color:var(--text-dim);">
+            <span>Courier: <strong style="color:#fff;" id="dispCarrier">BlueDart Express Air Cargo</strong></span><br>
+            <span>Tracking AWB: <strong style="color:var(--accent-cyan);" id="dispTrackingAwb">BD99281021IN</strong></span>
+          </div>
+        </div>
+
+        <!-- Bank & Aggregator Audit Trail -->
+        <div class="card-box">
+          <div class="card-heading">
+            <span>🔒 Payment Audit Trail</span>
+          </div>
+          <div class="audit-list">
+            <div class="audit-row">
+              <span class="audit-label">Universal Aggregator Txn ID</span>
+              <span class="audit-val" id="dispTxnId">txn_...</span>
+            </div>
+            <div class="audit-row">
+              <span class="audit-label">Bank Reference ID (UTR / RRN)</span>
+              <span class="audit-val" style="color:var(--accent-green);" id="dispBankRrn">RRN_STORE_...</span>
+            </div>
+            <div class="audit-row">
+              <span class="audit-label">Acquiring Bank Direct Switch</span>
+              <span class="audit-val" id="dispBankCode">HDFC Bank Direct</span>
+            </div>
+            <div class="audit-row">
+              <span class="audit-label">Payment Method</span>
+              <span class="audit-val" id="dispPaymentMethod">UPI Dynamic QR</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Actions -->
+    <div class="actions-bar">
+      <button type="button" class="btn-action btn-print" onclick="window.print()">
+        <span>🖨️ Print / Save Tax Invoice</span>
+      </button>
+      <a href="/store/index.html" class="btn-action btn-home">
+        <span>← Return to Store</span>
+      </a>
+    </div>
+
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderId = urlParams.get('orderId');
+
+    async function loadOrder() {
+      if (!orderId) {
+        document.getElementById('dispOrderId').textContent = 'No Order ID specified';
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/v1/store/orders/${orderId}`);
+        const json = await res.json();
+        if (json.success && json.data) {
+          const order = json.data;
+          const fmt = (num) => '₹' + Number(num).toLocaleString('en-IN');
+
+          document.getElementById('dispOrderId').textContent = order.orderId;
+          document.getElementById('dispEstimatedDelivery').textContent = order.tracking?.estimatedDelivery || '3 Business Days';
+          
+          // Items
+          const item = order.items[0];
+          if (item) {
+            document.getElementById('dispItemVariant').textContent = `${item.variantName} Finish`;
+            document.getElementById('dispItemPrice').textContent = fmt(item.unitPrice);
+          }
+
+          // Addons
+          if (item?.addons && item.addons.length > 0) {
+            const tbody = document.getElementById('invoiceItemsTbody');
+            item.addons.forEach(a => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td>
+                  <strong>${a.name}</strong><br>
+                  <span style="font-size:0.75rem; color:var(--text-muted);">Accessory Add-on</span>
+                </td>
+                <td>1</td>
+                <td class="amount-col">${fmt(a.price)}</td>
+              `;
+              tbody.appendChild(tr);
+            });
+          }
+
+          // Pricing
+          const p = order.pricing;
+          document.getElementById('dispSubtotal').textContent = fmt(p.subtotal);
+          document.getElementById('dispAddonsTotal').textContent = fmt(p.addonsTotal);
+          
+          if (p.discountAmount > 0) {
+            document.getElementById('dispDiscountRow').style.display = 'flex';
+            document.getElementById('dispDiscountLabel').textContent = `Discount (${p.couponCode})`;
+            document.getElementById('dispDiscount').textContent = `-${fmt(p.discountAmount)}`;
+          } else {
+            document.getElementById('dispDiscountRow').style.display = 'none';
+          }
+
+          document.getElementById('dispTaxable').textContent = fmt(p.taxableAmount);
+          document.getElementById('dispCgst').textContent = fmt(p.cgst);
+          document.getElementById('dispSgst').textContent = fmt(p.sgst);
+          document.getElementById('dispGrandTotal').textContent = fmt(p.totalPayable);
+
+          // Shipping
+          const c = order.customer;
+          document.getElementById('dispCustName').textContent = c.name;
+          document.getElementById('dispCustAddress').textContent = c.addressLine1;
+          document.getElementById('dispCustCity').textContent = `${c.city}, ${c.state} - ${c.pincode}`;
+          document.getElementById('dispCustPhone').textContent = c.phone;
+          document.getElementById('dispCustEmail').textContent = c.email;
+
+          // Tracking
+          document.getElementById('dispCarrier').textContent = order.tracking?.carrier || 'BlueDart Express Air';
+          document.getElementById('dispTrackingAwb').textContent = order.tracking?.trackingNumber || 'BD-PENDING';
+
+          // Payment Audit
+          document.getElementById('dispTxnId').textContent = order.payment?.aggregatorTransactionId || 'N/A';
+          document.getElementById('dispBankRrn').textContent = order.payment?.bankReferenceId || 'RRN_SIMULATED';
+          document.getElementById('dispBankCode').textContent = `${order.payment?.bankCode || 'HDFC'} Direct Acquiring Switch`;
+          document.getElementById('dispPaymentMethod').textContent = order.payment?.method || 'UPI Dynamic QR';
+        }
+      } catch (err) {
+        console.error('Failed to fetch order', err);
+      }
+    }
+
+    loadOrder();
+  </script>
+</body>
+</html>

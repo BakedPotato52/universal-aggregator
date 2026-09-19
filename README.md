@@ -196,19 +196,36 @@ Body:
 }
 ```
 
+### 6. DTC Flagship E-Commerce Storefront
+
+A production-grade direct-to-consumer sample store showcasing end-to-end integration:
+
+- **Storefront URL**: `http://localhost:3000/store/index.html` (or `http://localhost:3000/`)
+- **Product**: *AuraSound Apex 9 — Ultra-Fidelity Spatial Wireless ANC Headphones* (₹14,999)
+- **Features**:
+  - Live variant finish switcher (Obsidian Black, Titanium Silver, Cosmic Blue)
+  - Interactive accessory add-ons (Magnetic Hard Case, 4.4mm Balanced Silver Cable, AuraCare 2-Year Extended Protection)
+  - Coupon discount engine (`AURA10` for 10% off, `EARLYBIRD` for ₹1,000 off)
+  - Slide-over Universal Aggregator checkout drawer
+  - Dynamic UPI QR Code with 15-minute countdown and live 2s status polling
+  - 1-Click App Intent links (Google Pay, PhonePe, Paytm, CRED UPI, BHIM)
+  - 1-Click interactive payment simulation button for test drives
+  - Official Tax Invoice & Order Confirmation page with live delivery tracking and bank audit trail (`/store/order.html?orderId=...`)
+
 ---
 
 ## Running Automated Tests
 
 ```bash
-# Run all unit and integration test suites
+# Run all 8 unit and integration test suites
 npm test
 ```
 
 Test coverage includes:
+- Production E-Commerce Storefront (Catalog, Pricing Engine, Checkout, HMAC-SHA256 Webhook, Simulation)
 - NPCI UPI URI specifications & encoding
 - Dynamic QR code generation (SVG, PNG DataURL)
-- Mobile App Intent deep link generation
+- Mobile App Intent deep link generation (GPay `tez://`, PhonePe `phonepe://`, Paytm, CRED, BHIM)
 - Bank cryptography (HMAC-SHA256, SHA256 checksums, AES-256-CBC, AES-256-GCM)
 - Idempotency locking, concurrency deduplication, and cached response verification
 - Transaction Ledger state transitions & audit logs

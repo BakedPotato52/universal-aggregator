@@ -6,7 +6,8 @@ import { config } from '../config/index.js';
 class PrismaSingleton {
   private static instance: PrismaClient | null = null;
   private static pool: pg.Pool | null = null;
-  private static isConnected = false;
+  private static lastHealthCheck = 0;
+  private static isHealthy = false;
 
   public static getClient(): PrismaClient {
     if (!PrismaSingleton.instance) {
@@ -14,11 +15,23 @@ class PrismaSingleton {
         connectionString: config.database.url,
         max: 10,
         idleTimeoutMillis: 30000,
-        connectionTimeoutMillis: 2000,
+        keepAlive: true,
+        keepAliveInitialDelayMillis: 10000,
       });
 
-      pool.on('error', () => {
-        PrismaSingleton.isConnected = false;
+      // Handle idle socket drops gracefully without uncaught exceptions
+      pool.on('error', (err: any) => {
+        if (
+          err?.message &&
+          (err.message.includes('timeout') ||
+            err.message.includes('Connection terminated') ||
+            err.message.includes('closed') ||
+            err.message.includes('ECONNRESET'))
+        ) {
+          // Expected idle client cleanup
+          return;
+        }
+        PrismaSingleton.isHealthy = false;
       });
 
       const adapter = new PrismaPg(pool);
@@ -26,20 +39,26 @@ class PrismaSingleton {
       PrismaSingleton.pool = pool;
       PrismaSingleton.instance = new PrismaClient({
         adapter,
-        log: process.env.NODE_ENV === 'development' ? ['warn', 'error'] : ['error'],
       });
     }
     return PrismaSingleton.instance;
   }
 
   public static async isAvailable(): Promise<boolean> {
+    const now = Date.now();
+    // Cache positive health check for 15 seconds to prevent hammering the pool
+    if (PrismaSingleton.isHealthy && now - PrismaSingleton.lastHealthCheck < 15000) {
+      return true;
+    }
+
     try {
       const client = this.getClient();
       await client.$queryRaw`SELECT 1`;
-      PrismaSingleton.isConnected = true;
+      PrismaSingleton.isHealthy = true;
+      PrismaSingleton.lastHealthCheck = now;
       return true;
     } catch {
-      PrismaSingleton.isConnected = false;
+      PrismaSingleton.isHealthy = false;
       return false;
     }
   }
@@ -53,7 +72,7 @@ class PrismaSingleton {
     }
     PrismaSingleton.instance = null;
     PrismaSingleton.pool = null;
-    PrismaSingleton.isConnected = false;
+    PrismaSingleton.isHealthy = false;
   }
 }
 

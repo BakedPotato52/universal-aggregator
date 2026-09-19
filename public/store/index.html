@@ -1,0 +1,1853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AuraSound Apex 9 — Ultra-Fidelity Spatial Wireless ANC Headphones</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0d14;
+      --bg-card: #121722;
+      --bg-card-hover: #182030;
+      --bg-surface: #1e2638;
+      --bg-input: #0e121a;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: #3b82f6;
+      
+      --accent-primary: #3b82f6;
+      --accent-cyan: #06b6d4;
+      --accent-purple: #8b5cf6;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+      
+      --shadow-glow: 0 0 40px rgba(59, 130, 246, 0.15);
+      --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Top Banner */
+    .top-ticker {
+      background: linear-gradient(90deg, #1e1b4b, #312e81, #1e1b4b);
+      color: #c7d2fe;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      text-align: center;
+      letter-spacing: 0.02em;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .ticker-badge {
+      background: #4f46e5;
+      color: #fff;
+      font-size: 0.68rem;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    /* Navbar */
+    header {
+      background: rgba(10, 13, 20, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-cyan));
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.2rem;
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+    }
+
+    .brand-name {
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #fff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--text-main);
+    }
+
+    .nav-btn-dev {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .nav-btn-dev:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--accent-primary);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    /* Hero PDP Section */
+    .pdp-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 50px;
+      align-items: start;
+      margin-bottom: 80px;
+    }
+
+    /* Gallery Side */
+    .gallery-container {
+      position: sticky;
+      top: 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .main-stage {
+      background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      min-height: 440px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .stage-glow {
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      background: var(--accent-primary);
+      filter: blur(100px);
+      opacity: 0.25;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .product-visual-svg {
+      width: 100%;
+      max-width: 320px;
+      height: auto;
+      filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.7));
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .product-visual-svg:hover {
+      transform: scale(1.04) rotate(-1deg);
+    }
+
+    .stage-badges {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .pill-badge {
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .pill-badge.gold {
+      border-color: rgba(245, 158, 11, 0.4);
+      color: #fbbf24;
+    }
+
+    .pill-badge.cyan {
+      border-color: rgba(6, 182, 212, 0.4);
+      color: #38bdf8;
+    }
+
+    .features-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .mini-feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      text-align: center;
+      font-size: 0.75rem;
+    }
+
+    .mini-feature-card strong {
+      display: block;
+      color: #fff;
+      font-size: 0.82rem;
+      margin-bottom: 2px;
+    }
+
+    .mini-feature-card span {
+      color: var(--text-muted);
+    }
+
+    /* Details Side */
+    .pdp-info {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .product-header-tag {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-cyan);
+      font-weight: 700;
+    }
+
+    .product-title {
+      font-size: 2.4rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+    }
+
+    .product-tagline {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-top: -8px;
+    }
+
+    .ratings-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.88rem;
+    }
+
+    .stars {
+      color: #fbbf24;
+      letter-spacing: 2px;
+    }
+
+    .rating-number {
+      font-weight: 700;
+    }
+
+    .reviews-count {
+      color: var(--text-dim);
+    }
+
+    .pricing-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .price-group {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .current-price {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .original-price {
+      font-size: 1.1rem;
+      color: var(--text-dim);
+      text-decoration: line-through;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .discount-tag {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-green);
+      font-weight: 700;
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .inclusive-tax {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    /* Variant Selector */
+    .section-label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .variants-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .variant-option {
+      background: var(--bg-card);
+      border: 2px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s;
+    }
+
+    .variant-option:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .variant-option.active {
+      border-color: var(--accent-primary);
+      background: rgba(59, 130, 246, 0.08);
+    }
+
+    .color-swatch {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      flex-shrink: 0;
+    }
+
+    .variant-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    /* Add-ons Selector */
+    .addons-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .addon-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .addon-card:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .addon-card.selected {
+      border-color: var(--accent-cyan);
+      background: rgba(6, 182, 212, 0.06);
+    }
+
+    .addon-info {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .addon-checkbox {
+      margin-top: 3px;
+      accent-color: var(--accent-cyan);
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .addon-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .addon-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .addon-price {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      white-space: nowrap;
+    }
+
+    /* CTA Buttons */
+    .cta-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .btn-buy-now {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 18px 28px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
+      transition: all 0.2s;
+    }
+
+    .btn-buy-now:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(37, 99, 235, 0.6);
+    }
+
+    .guarantee-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding-top: 8px;
+    }
+
+    .guarantee-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    .guarantee-icon {
+      color: var(--accent-green);
+      font-size: 1rem;
+    }
+
+    /* Specs & Description Section */
+    .details-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      margin-bottom: 60px;
+    }
+
+    .section-title-large {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px 32px;
+    }
+
+    .spec-row {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 10px;
+      font-size: 0.88rem;
+    }
+
+    .spec-key {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .spec-value {
+      color: #fff;
+      font-weight: 600;
+      text-align: right;
+    }
+
+    /* ======================================================== */
+    /* CHECKOUT MODAL & UNIVERSAL AGGREGATOR PAYMENT DRAWER     */
+    /* ======================================================== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(4, 7, 13, 0.8);
+      backdrop-filter: blur(12px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .checkout-modal {
+      background: #0f141f;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 820px;
+      max-height: 92vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      position: relative;
+    }
+
+    .checkout-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      color: var(--text-muted);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      z-index: 10;
+    }
+
+    .checkout-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    .checkout-form-side {
+      padding: 32px;
+      border-right: 1px solid var(--border-subtle);
+    }
+
+    .checkout-summary-side {
+      padding: 32px;
+      background: #0b0e17;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .modal-heading {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .modal-subheading {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      color: #fff;
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus {
+      border-color: var(--accent-primary);
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .btn-autofill {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px dashed rgba(59, 130, 246, 0.4);
+      color: var(--accent-primary);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      margin-bottom: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-autofill:hover {
+      background: rgba(59, 130, 246, 0.2);
+    }
+
+    /* Coupon Input */
+    .coupon-box {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+      margin-bottom: 14px;
+    }
+
+    .btn-coupon {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0 16px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-coupon:hover {
+      background: var(--accent-primary);
+    }
+
+    /* Order Summary Breakdown */
+    .summary-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 10px;
+    }
+
+    .summary-item-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      align-items: center;
+    }
+
+    .summary-item-thumb {
+      width: 50px;
+      height: 50px;
+      background: var(--bg-card);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+
+    .summary-item-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .summary-item-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .bill-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.82rem;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 14px;
+      margin-top: 10px;
+    }
+
+    .bill-row {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-muted);
+    }
+
+    .bill-row.discount {
+      color: var(--accent-green);
+    }
+
+    .bill-row.total {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 10px;
+      margin-top: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .btn-proceed-pay {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-proceed-pay:hover {
+      filter: brightness(1.1);
+    }
+
+    /* ======================================================== */
+    /* PAYMENT SCREEN (UPI QR & INTENTS)                        */
+    /* ======================================================== */
+    .payment-view {
+      display: none;
+      padding: 32px;
+      grid-column: span 2;
+      text-align: center;
+    }
+
+    .payment-view.active {
+      display: block;
+    }
+
+    .pay-header {
+      margin-bottom: 24px;
+    }
+
+    .pay-amount-badge {
+      display: inline-block;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      color: var(--accent-primary);
+      padding: 6px 18px;
+      border-radius: var(--radius-full);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .pay-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      text-align: left;
+      align-items: start;
+    }
+
+    .qr-card-box {
+      background: #fff;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      color: #0f172a;
+    }
+
+    .qr-image-wrapper {
+      width: 220px;
+      height: 220px;
+      margin-bottom: 12px;
+    }
+
+    .qr-image-wrapper svg,
+    .qr-image-wrapper img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .qr-timer {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .polling-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      color: #059669;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    /* UPI Apps Intent List */
+    .intent-section-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+
+    .intent-apps-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .intent-app-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      color: #fff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .intent-app-btn:hover {
+      background: var(--bg-surface);
+      border-color: var(--accent-primary);
+    }
+
+    .intent-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.75rem;
+    }
+
+    .icon-gpay { background: #ea4335; color: #fff; }
+    .icon-phonepe { background: #5f259f; color: #fff; }
+    .icon-paytm { background: #00b9f5; color: #fff; }
+    .icon-cred { background: #1c1c1c; border: 1px solid #444; color: #fff; }
+
+    /* Sandbox Instant Simulator Box */
+    .simulator-test-box {
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px dashed rgba(245, 158, 11, 0.4);
+      border-radius: var(--radius-md);
+      padding: 18px;
+    }
+
+    .sim-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fbbf24;
+      margin-bottom: 6px;
+    }
+
+    .sim-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .btn-sim-pay {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #000;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 10px 16px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-sim-pay:hover {
+      filter: brightness(1.1);
+    }
+
+    /* Success Splash State */
+    .success-overlay {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .success-overlay.active {
+      display: flex;
+    }
+
+    .check-circle-anim {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      animation: scaleUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes scaleUp {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 40px 24px;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.82rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .pdp-grid {
+        grid-template-columns: 1fr;
+      }
+      .checkout-modal {
+        grid-template-columns: 1fr;
+      }
+      .checkout-form-side {
+        border-right: none;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+      .pay-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Offer Strip -->
+  <div class="top-ticker">
+    <span class="ticker-badge">Launch Special</span>
+    <span>Use coupon code <strong>AURA10</strong> for extra 10% instant discount + Free Express Delivery across India</span>
+  </div>
+
+  <!-- Navbar -->
+  <header>
+    <a href="/store/index.html" class="brand">
+      <div class="brand-logo">A</div>
+      <div class="brand-name">AURASOUND</div>
+    </a>
+    <div class="nav-links">
+      <a href="#specs" class="nav-link">Specifications</a>
+      <a href="#features" class="nav-link">Technology</a>
+      <a href="/demo/index.html" class="nav-btn-dev" title="Developer Aggregator Switch Console">
+        <span>⚙️ Aggregator Engine</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="container">
+    
+    <!-- PDP Hero Grid -->
+    <div class="pdp-grid">
+      
+      <!-- Gallery Column -->
+      <div class="gallery-container">
+        <div class="main-stage">
+          <div class="stage-glow"></div>
+          
+          <div class="stage-badges">
+            <span class="pill-badge gold">★ Red Dot Award 2026</span>
+            <span class="pill-badge cyan">Hi-Res Audio Wireless</span>
+          </div>
+
+          <!-- Stylized High-Fidelity Headphone Artwork -->
+          <svg class="product-visual-svg" id="productSvg" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="headbandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#334155" />
+                <stop offset="50%" stop-color="#0f172a" />
+                <stop offset="100%" stop-color="#1e293b" />
+              </linearGradient>
+              <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#3b82f6" />
+                <stop offset="100%" stop-color="#06b6d4" />
+              </linearGradient>
+              <linearGradient id="earcupGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#1e293b" />
+                <stop offset="100%" stop-color="#090d16" />
+              </linearGradient>
+            </defs>
+            <!-- Arch Headband -->
+            <path d="M 90 240 C 70 80, 330 80, 310 240" stroke="url(#headbandGrad)" stroke-width="26" stroke-linecap="round" />
+            <path d="M 110 210 C 95 95, 305 95, 290 210" stroke="url(#accentGrad)" stroke-width="4" stroke-linecap="round" opacity="0.8" />
+            
+            <!-- Left Yoke -->
+            <path d="M 85 220 L 70 270" stroke="#475569" stroke-width="12" stroke-linecap="round"/>
+            <!-- Left Ear Cup -->
+            <ellipse id="leftEarCup" cx="70" cy="285" rx="38" ry="60" fill="url(#earcupGrad)" stroke="#3b82f6" stroke-width="4"/>
+            <circle cx="70" cy="285" r="16" fill="#0f172a" stroke="#475569" stroke-width="2" />
+            
+            <!-- Right Yoke -->
+            <path d="M 315 220 L 330 270" stroke="#475569" stroke-width="12" stroke-linecap="round"/>
+            <!-- Right Ear Cup -->
+            <ellipse id="rightEarCup" cx="330" cy="285" rx="38" ry="60" fill="url(#earcupGrad)" stroke="#3b82f6" stroke-width="4"/>
+            <circle cx="330" cy="285" r="16" fill="#0f172a" stroke="#475569" stroke-width="2" />
+
+            <!-- Acoustic Wave Ring Elements -->
+            <circle cx="200" cy="285" r="70" stroke="url(#accentGrad)" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.3" />
+            <circle cx="200" cy="285" r="110" stroke="url(#accentGrad)" stroke-width="1" stroke-dasharray="4 8" opacity="0.15" />
+          </svg>
+        </div>
+
+        <div class="features-strip">
+          <div class="mini-feature-card">
+            <strong>45mm Drivers</strong>
+            <span>Pure Beryllium</span>
+          </div>
+          <div class="mini-feature-card">
+            <strong>-48dB ANC</strong>
+            <span>Hybrid Silence</span>
+          </div>
+          <div class="mini-feature-card">
+            <strong>65-Hour</strong>
+            <span>Battery Life</span>
+          </div>
+          <div class="mini-feature-card">
+            <strong>LDAC Audio</strong>
+            <span>24-bit Lossless</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Configuration Column -->
+      <div class="pdp-info">
+        <div>
+          <span class="product-header-tag">Direct-To-Consumer Flagship</span>
+          <h1 class="product-title">AuraSound Apex 9</h1>
+          <p class="product-tagline">Ultra-Fidelity Spatial Wireless ANC Headphones</p>
+        </div>
+
+        <div class="ratings-row">
+          <span class="stars">★★★★★</span>
+          <span class="rating-number">4.9 / 5.0</span>
+          <span class="reviews-count">(1,284 verified buyers)</span>
+        </div>
+
+        <div class="pricing-card">
+          <div>
+            <div class="price-group">
+              <span class="current-price" id="displayTotalPrice">₹1</span>
+              <span class="original-price">₹24,999</span>
+              <span class="discount-tag">TEST DRIVE: ₹1</span>
+            </div>
+            <div class="inclusive-tax">Test Price: ₹1.00 for live UPI Sandbox & Direct Bank verification</div>
+          </div>
+        </div>
+
+        <!-- Variant Selector -->
+        <div>
+          <div class="section-label">
+            <span>CHOOSE FINISH</span>
+            <span id="selectedVariantLabel" style="color:#fff;">Obsidian Black</span>
+          </div>
+          <div class="variants-grid">
+            <div class="variant-option active" data-variant="var_obsidian_black" data-color="#1e2022" data-name="Obsidian Black">
+              <div class="color-swatch" style="background: #1e2022;"></div>
+              <div class="variant-name">Obsidian Black</div>
+            </div>
+            <div class="variant-option" data-variant="var_titanium_silver" data-color="#d1d5db" data-name="Titanium Silver">
+              <div class="color-swatch" style="background: #d1d5db;"></div>
+              <div class="variant-name">Titanium Silver</div>
+            </div>
+            <div class="variant-option" data-variant="var_cosmic_blue" data-color="#1e3a8a" data-name="Cosmic Blue">
+              <div class="color-swatch" style="background: #1e3a8a;"></div>
+              <div class="variant-name">Cosmic Blue</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add-ons Selection -->
+        <div>
+          <div class="section-label">
+            <span>RECOMMENDED ACCESSORIES</span>
+            <span style="font-size:0.75rem; color:var(--accent-cyan);">Included in ₹1 Test Demo</span>
+          </div>
+          <div class="addons-list">
+            <label class="addon-card" data-addon-id="addon_hard_case" data-price="0">
+              <div class="addon-info">
+                <input type="checkbox" class="addon-checkbox" id="addonCase">
+                <div>
+                  <div class="addon-title">Magnetic Armor Hard Travel Case</div>
+                  <div class="addon-desc">Water-repellent ballistic nylon shell with magnetic cable organizers</div>
+                </div>
+              </div>
+              <div class="addon-price">FREE</div>
+            </label>
+
+            <label class="addon-card" data-addon-id="addon_braided_cable" data-price="0">
+              <div class="addon-info">
+                <input type="checkbox" class="addon-checkbox" id="addonCable">
+                <div>
+                  <div class="addon-title">Custom 4.4mm Balanced Silver Cable</div>
+                  <div class="addon-desc">Ultra-pure OCC silver-plated copper for audiophile DACs</div>
+                </div>
+              </div>
+              <div class="addon-price">FREE</div>
+            </label>
+
+            <label class="addon-card selected" data-addon-id="addon_extended_care" data-price="0">
+              <div class="addon-info">
+                <input type="checkbox" class="addon-checkbox" id="addonCare" checked>
+                <div>
+                  <div class="addon-title">AuraCare 2-Year Full Protection</div>
+                  <div class="addon-desc">Accidental damage & liquid protection with free express replacement</div>
+                </div>
+              </div>
+              <div class="addon-price">FREE</div>
+            </label>
+          </div>
+        </div>
+
+        <!-- CTA Action -->
+        <div class="cta-stack">
+          <button class="btn-buy-now" id="btnOpenCheckout">
+            <span>⚡ Instant Checkout with Universal Aggregator</span>
+            <span style="font-family:'JetBrains Mono'; font-size:1.1rem;" id="btnCheckoutPrice">₹1</span>
+          </button>
+          
+          <div class="guarantee-strip">
+            <div class="guarantee-item">
+              <span class="guarantee-icon">🛡️</span>
+              <span>1 Year Warranty</span>
+            </div>
+            <div class="guarantee-item">
+              <span class="guarantee-icon">⚡</span>
+              <span>Express Delivery</span>
+            </div>
+            <div class="guarantee-item">
+              <span class="guarantee-icon">🔄</span>
+              <span>7-Day Replacement</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Tech Specs Section -->
+    <div class="details-section" id="specs">
+      <h2 class="section-title-large">Engineered Without Compromise</h2>
+      <div class="specs-grid">
+        <div class="spec-row">
+          <span class="spec-key">Acoustic Transducers</span>
+          <span class="spec-value">45mm Pure Beryllium Transducers</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Frequency Range</span>
+          <span class="spec-value">5 Hz - 45,000 Hz (Hi-Res Certified)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Noise Cancellation</span>
+          <span class="spec-value">Hybrid Adaptive ANC (-48dB Peak)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Battery Life</span>
+          <span class="spec-value">65 Hours (48h with ANC Active)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Supported Codecs</span>
+          <span class="spec-value">Sony LDAC, Qualcomm aptX HD, AAC, SBC</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Enclosure Architecture</span>
+          <span class="spec-value">CNC Anodized Aircraft-Grade Aluminum</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- CHECKOUT & UNIVERSAL AGGREGATOR PAYMENT MODAL            -->
+  <!-- ======================================================== */ -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="checkout-modal">
+      <button class="checkout-close" id="btnCloseModal">✕</button>
+      
+      <!-- STEP 1 & 2: CUSTOMER SHIPPING & ORDER SUMMARY -->
+      <div class="checkout-form-side" id="checkoutFormStep">
+        <div class="modal-heading">
+          <span>📦 Shipping Information</span>
+        </div>
+        <p class="modal-subheading">Enter your delivery details for expedited dispatch</p>
+
+        <button type="button" class="btn-autofill" id="btnAutofill">
+          <span>⚡ Quick Fill Sample Address</span>
+        </button>
+
+        <form id="orderForm">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" class="form-input" id="custName" placeholder="Aditya Sharma" required>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-input" id="custEmail" placeholder="aditya@example.com" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mobile Number</label>
+              <input type="tel" class="form-input" id="custPhone" placeholder="9876543210" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Delivery Street Address</label>
+            <input type="text" class="form-input" id="custAddress" placeholder="Penthouse 4B, Cyber Palms, Golf Course Rd" required>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">City</label>
+              <input type="text" class="form-input" id="custCity" placeholder="Gurugram" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">PIN Code</label>
+              <input type="text" class="form-input" id="custPincode" placeholder="122002" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">State</label>
+            <input type="text" class="form-input" id="custState" placeholder="Haryana" required>
+          </div>
+        </form>
+      </div>
+
+      <!-- SUMMARY SIDE -->
+      <div class="checkout-summary-side" id="checkoutSummaryStep">
+        <div>
+          <div class="summary-title">Order Summary</div>
+          
+          <div class="summary-item-row">
+            <div class="summary-item-thumb">🎧</div>
+            <div>
+              <div class="summary-item-title">AuraSound Apex 9</div>
+              <div class="summary-item-sub" id="summaryVariantText">Obsidian Black</div>
+            </div>
+          </div>
+
+          <!-- Coupon Code -->
+          <div class="coupon-box">
+            <input type="text" class="form-input" id="couponInput" placeholder="Promo Code (e.g. AURA10)" value="AURA10">
+            <button type="button" class="btn-coupon" id="btnApplyCoupon">Apply</button>
+          </div>
+
+          <!-- Itemized Breakdown -->
+          <div class="bill-rows">
+            <div class="bill-row">
+              <span>Base Price</span>
+              <span id="billBase">₹1</span>
+            </div>
+            <div class="bill-row" id="billAddonsRow">
+              <span>Selected Accessories</span>
+              <span id="billAddons">FREE</span>
+            </div>
+            <div class="bill-row discount" id="billDiscountRow" style="display:none;">
+              <span id="billDiscountLabel">Discount (AURA10)</span>
+              <span id="billDiscount">-₹0</span>
+            </div>
+            <div class="bill-row">
+              <span>GST (18% inclusive)</span>
+              <span id="billTax">Included</span>
+            </div>
+            <div class="bill-row">
+              <span>Express Delivery</span>
+              <span style="color:var(--accent-green);">FREE</span>
+            </div>
+            <div class="bill-row total">
+              <span>Total Payable</span>
+              <span id="billTotal">₹1</span>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="btn-proceed-pay" id="btnProceedToPayment">
+          <span>🔒 Proceed to UPI Payment</span>
+        </button>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- STEP 3: PAYMENT SCREEN WITH DYNAMIC QR & INTENTS         -->
+      <!-- ======================================================== -->
+      <div class="payment-view" id="paymentViewStep">
+        <div class="pay-header">
+          <div class="pay-amount-badge" id="payModalAmount">₹1</div>
+          <h2 style="font-size:1.4rem; font-weight:800; color:#fff;">Universal Aggregator Payment Gateway</h2>
+          <p style="font-size:0.8rem; color:var(--text-muted);">
+            Scan UPI QR Code with any UPI App or tap direct intent below
+          </p>
+        </div>
+
+        <div class="pay-grid">
+          <!-- QR Card -->
+          <div class="qr-card-box">
+            <div class="qr-image-wrapper" id="qrContainer">
+              <!-- SVG / IMG will be injected here -->
+            </div>
+            <div style="font-size:0.88rem; font-weight:700; color:#0f172a; margin-bottom:2px;" id="qrPayeeName">Merchant Payee</div>
+            <div style="font-size:0.75rem; font-family:'JetBrains Mono'; color:#475569; background:#f1f5f9; padding:4px 10px; border-radius:6px; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+              <span id="qrPayeeVpa">merchant@upi</span>
+              <button type="button" id="btnCopyVpa" style="background:none; border:none; cursor:pointer; font-size:0.8rem; color:#2563eb;" title="Copy UPI ID">📋</button>
+            </div>
+            <div class="qr-timer">
+              <span>⏳ Expires in: <strong id="qrTimerCount">14:59</strong></span>
+            </div>
+            <div class="polling-indicator">
+              <span class="pulse-dot"></span>
+              <span>Awaiting payment confirmation...</span>
+            </div>
+          </div>
+
+          <!-- Intent Apps & Simulator Action -->
+          <div>
+            <div class="intent-section-title">⚡ Pay Directly via UPI App</div>
+            <div class="intent-apps-grid">
+              <a href="#" class="intent-app-btn" id="linkGpay" target="_blank">
+                <span class="intent-icon icon-gpay">G</span>
+                <span>Google Pay</span>
+              </a>
+              <a href="#" class="intent-app-btn" id="linkPhonepe" target="_blank">
+                <span class="intent-icon icon-phonepe">P</span>
+                <span>PhonePe</span>
+              </a>
+              <a href="#" class="intent-app-btn" id="linkPaytm" target="_blank">
+                <span class="intent-icon icon-paytm">₹</span>
+                <span>Paytm</span>
+              </a>
+              <a href="#" class="intent-app-btn" id="linkCred" target="_blank">
+                <span class="intent-icon icon-cred">C</span>
+                <span>CRED UPI</span>
+              </a>
+            </div>
+
+            <!-- Instant Test Simulation Box -->
+            <div class="simulator-test-box">
+              <div class="sim-header">
+                <span>🧪 Interactive Test Simulator</span>
+              </div>
+              <p class="sim-desc">
+                Testing this store? Click below to simulate instant UPI customer PIN authorization and trigger the bank S2S webhook:
+              </p>
+              <button type="button" class="btn-sim-pay" id="btnSimulateCustomerPay">
+                <span>🚀 Simulate 1-Click UPI Payment</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUCCESS SPLASH ANIMATION -->
+      <div class="success-overlay" id="successOverlay">
+        <div class="check-circle-anim">✓</div>
+        <h2 style="font-size:1.8rem; font-weight:800; color:#fff; margin-bottom:8px;">Payment Successful!</h2>
+        <p style="color:var(--text-muted); margin-bottom:16px;">Bank UTR Confirmed. Redirecting to your Order Receipt...</p>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 AuraSound Acoustics Pvt Ltd. All rights reserved. Powered by Universal Payment Aggregator & Orchestration Engine.</p>
+  </footer>
+
+  <!-- CLIENT-SIDE SCRIPT -->
+  <script>
+    // State
+    let currentVariant = 'var_obsidian_black';
+    let currentVariantName = 'Obsidian Black';
+    let selectedAddonIds = ['addon_extended_care'];
+    let couponCode = 'AURA10';
+    let currentOrderId = null;
+    let pollInterval = null;
+    let timerInterval = null;
+
+    // Elements
+    const displayTotalPrice = document.getElementById('displayTotalPrice');
+    const btnCheckoutPrice = document.getElementById('btnCheckoutPrice');
+    const selectedVariantLabel = document.getElementById('selectedVariantLabel');
+    const summaryVariantText = document.getElementById('summaryVariantText');
+    const leftEarCup = document.getElementById('leftEarCup');
+    const rightEarCup = document.getElementById('rightEarCup');
+
+    // Modals
+    const checkoutModal = document.getElementById('checkoutModal');
+    const btnOpenCheckout = document.getElementById('btnOpenCheckout');
+    const btnCloseModal = document.getElementById('btnCloseModal');
+    const btnAutofill = document.getElementById('btnAutofill');
+    const btnApplyCoupon = document.getElementById('btnApplyCoupon');
+    const couponInput = document.getElementById('couponInput');
+    const btnProceedToPayment = document.getElementById('btnProceedToPayment');
+    const btnSimulateCustomerPay = document.getElementById('btnSimulateCustomerPay');
+
+    const checkoutFormStep = document.getElementById('checkoutFormStep');
+    const checkoutSummaryStep = document.getElementById('checkoutSummaryStep');
+    const paymentViewStep = document.getElementById('paymentViewStep');
+    const successOverlay = document.getElementById('successOverlay');
+
+    // Pricing calculation
+    async function recalculatePricing() {
+      try {
+        const res = await fetch('/api/v1/store/pricing', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            variantId: currentVariant,
+            addonIds: selectedAddonIds,
+            couponCode: couponCode,
+          }),
+        });
+        const json = await res.json();
+        if (json.success) {
+          const p = json.data.breakdown;
+          const fmt = (num) => '₹' + Number(num).toLocaleString('en-IN');
+          
+          displayTotalPrice.textContent = fmt(p.totalPayable);
+          btnCheckoutPrice.textContent = fmt(p.totalPayable);
+          document.getElementById('billBase').textContent = fmt(p.subtotal);
+          document.getElementById('billAddons').textContent = fmt(p.addonsTotal);
+          
+          if (p.discountAmount > 0) {
+            document.getElementById('billDiscountRow').style.display = 'flex';
+            document.getElementById('billDiscountLabel').textContent = `Discount (${p.couponCode})`;
+            document.getElementById('billDiscount').textContent = `-${fmt(p.discountAmount)}`;
+          } else {
+            document.getElementById('billDiscountRow').style.display = 'none';
+          }
+
+          document.getElementById('billTotal').textContent = fmt(p.totalPayable);
+          document.getElementById('payModalAmount').textContent = fmt(p.totalPayable);
+        }
+      } catch (err) {
+        console.error('Failed to calculate pricing', err);
+      }
+    }
+
+    // Variant switcher
+    document.querySelectorAll('.variant-option').forEach(el => {
+      el.addEventListener('click', () => {
+        document.querySelectorAll('.variant-option').forEach(v => v.classList.remove('active'));
+        el.classList.add('active');
+        currentVariant = el.dataset.variant;
+        currentVariantName = el.dataset.name;
+        selectedVariantLabel.textContent = currentVariantName;
+        summaryVariantText.textContent = currentVariantName;
+
+        // Visual color change
+        const color = el.dataset.color;
+        if (currentVariant === 'var_titanium_silver') {
+          leftEarCup.setAttribute('fill', '#64748b');
+          rightEarCup.setAttribute('fill', '#64748b');
+        } else if (currentVariant === 'var_cosmic_blue') {
+          leftEarCup.setAttribute('fill', '#1e3a8a');
+          rightEarCup.setAttribute('fill', '#1e3a8a');
+        } else {
+          leftEarCup.setAttribute('fill', '#090d16');
+          rightEarCup.setAttribute('fill', '#090d16');
+        }
+
+        recalculatePricing();
+      });
+    });
+
+    // Addons toggle
+    document.querySelectorAll('.addon-card').forEach(card => {
+      const checkbox = card.querySelector('.addon-checkbox');
+      card.addEventListener('click', (e) => {
+        if (e.target !== checkbox) {
+          checkbox.checked = !checkbox.checked;
+        }
+        if (checkbox.checked) {
+          card.classList.add('selected');
+        } else {
+          card.classList.remove('selected');
+        }
+
+        selectedAddonIds = Array.from(document.querySelectorAll('.addon-checkbox:checked'))
+          .map(cb => cb.closest('.addon-card').dataset.addonId);
+        
+        recalculatePricing();
+      });
+    });
+
+    // Coupon
+    btnApplyCoupon.addEventListener('click', () => {
+      couponCode = couponInput.value.trim();
+      recalculatePricing();
+    });
+
+    // Modal triggers
+    btnOpenCheckout.addEventListener('click', () => {
+      checkoutModal.classList.add('active');
+      checkoutFormStep.style.display = 'block';
+      checkoutSummaryStep.style.display = 'flex';
+      paymentViewStep.classList.remove('active');
+      successOverlay.classList.remove('active');
+      recalculatePricing();
+    });
+
+    btnCloseModal.addEventListener('click', () => {
+      checkoutModal.classList.remove('active');
+      clearInterval(pollInterval);
+      clearInterval(timerInterval);
+    });
+
+    // Copy UPI ID button
+    document.getElementById('btnCopyVpa').addEventListener('click', () => {
+      const vpa = document.getElementById('qrPayeeVpa').textContent;
+      navigator.clipboard.writeText(vpa);
+      const btn = document.getElementById('btnCopyVpa');
+      btn.textContent = '✓ Copied';
+      setTimeout(() => { btn.textContent = '📋'; }, 2000);
+    });
+
+    // Autofill
+    btnAutofill.addEventListener('click', () => {
+      document.getElementById('custName').value = 'Aarav Patel';
+      document.getElementById('custEmail').value = 'aarav.patel@gmail.com';
+      document.getElementById('custPhone').value = '9820198201';
+      document.getElementById('custAddress').value = 'Villa 14, Palm Meadows, Whitefield';
+      document.getElementById('custCity').value = 'Bengaluru';
+      document.getElementById('custPincode').value = '560066';
+      document.getElementById('custState').value = 'Karnataka';
+    });
+
+    // Proceed to Payment
+    btnProceedToPayment.addEventListener('click', async () => {
+      const form = document.getElementById('orderForm');
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const customer = {
+        name: document.getElementById('custName').value,
+        email: document.getElementById('custEmail').value,
+        phone: document.getElementById('custPhone').value,
+        addressLine1: document.getElementById('custAddress').value,
+        city: document.getElementById('custCity').value,
+        pincode: document.getElementById('custPincode').value,
+        state: document.getElementById('custState').value,
+      };
+
+      btnProceedToPayment.textContent = '⏳ Orchestrating Payment Engine...';
+      btnProceedToPayment.disabled = true;
+
+      try {
+        const res = await fetch('/api/v1/store/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            customer,
+            variantId: currentVariant,
+            addonIds: selectedAddonIds,
+            couponCode: couponCode,
+          }),
+        });
+
+        const json = await res.json();
+        if (json.success) {
+          const { order, payment } = json.data;
+          currentOrderId = order.orderId;
+
+          // Render QR
+          const qrContainer = document.getElementById('qrContainer');
+          if (payment.upi.qrSvg) {
+            qrContainer.innerHTML = payment.upi.qrSvg;
+          } else if (payment.upi.qrDataUrl) {
+            qrContainer.innerHTML = `<img src="${payment.upi.qrDataUrl}" alt="UPI QR" />`;
+          }
+
+          // Populate Payee Details from .env
+          if (payment.upi.payeeName) {
+            document.getElementById('qrPayeeName').textContent = payment.upi.payeeName;
+          }
+          if (payment.upi.payeeVpa) {
+            document.getElementById('qrPayeeVpa').textContent = payment.upi.payeeVpa;
+          }
+
+          // Render Intent Links
+          if (payment.intentLinks) {
+            document.getElementById('linkGpay').href = payment.intentLinks.gpay || payment.intentLinks.genericUpi;
+            document.getElementById('linkPhonepe').href = payment.intentLinks.phonepe || payment.intentLinks.genericUpi;
+            document.getElementById('linkPaytm').href = payment.intentLinks.paytm || payment.intentLinks.genericUpi;
+            document.getElementById('linkCred').href = payment.intentLinks.cred || payment.intentLinks.genericUpi;
+          }
+
+          // Switch steps
+          checkoutFormStep.style.display = 'none';
+          checkoutSummaryStep.style.display = 'none';
+          paymentViewStep.classList.add('active');
+
+          // Start Timer (15 min)
+          startQrTimer(15 * 60);
+
+          // Start Live Polling (every 2s)
+          startPolling(order.orderId);
+        } else {
+          alert('Checkout failed: ' + (json.message || 'Unknown error'));
+        }
+      } catch (err) {
+        alert('Network error during checkout');
+      } finally {
+        btnProceedToPayment.textContent = '🔒 Proceed to UPI Payment';
+        btnProceedToPayment.disabled = false;
+      }
+    });
+
+    // 15-min countdown
+    function startQrTimer(seconds) {
+      clearInterval(timerInterval);
+      let rem = seconds;
+      const el = document.getElementById('qrTimerCount');
+      timerInterval = setInterval(() => {
+        rem--;
+        if (rem <= 0) {
+          clearInterval(timerInterval);
+          el.textContent = '00:00 (Expired)';
+          return;
+        }
+        const m = Math.floor(rem / 60).toString().padStart(2, '0');
+        const s = (rem % 60).toString().padStart(2, '0');
+        el.textContent = `${m}:${s}`;
+      }, 1000);
+    }
+
+    // Status polling
+    function startPolling(orderId) {
+      clearInterval(pollInterval);
+      pollInterval = setInterval(async () => {
+        try {
+          const res = await fetch(`/api/v1/store/orders/${orderId}`);
+          const json = await res.json();
+          if (json.success && json.data && json.data.status === 'CONFIRMED') {
+            clearInterval(pollInterval);
+            clearInterval(timerInterval);
+            showSuccessAndRedirect(orderId);
+          }
+        } catch (err) {
+          console.warn('Polling status check error', err);
+        }
+      }, 2000);
+    }
+
+    // Simulate Pay
+    btnSimulateCustomerPay.addEventListener('click', async () => {
+      if (!currentOrderId) return;
+      btnSimulateCustomerPay.textContent = '⚡ Simulating UPI PIN Approval...';
+      btnSimulateCustomerPay.disabled = true;
+
+      try {
+        const res = await fetch('/api/v1/store/simulate-pay', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            orderId: currentOrderId,
+            payerVpa: 'aarav.patel@okhdfcbank',
+          }),
+        });
+        const json = await res.json();
+        if (json.success) {
+          clearInterval(pollInterval);
+          clearInterval(timerInterval);
+          showSuccessAndRedirect(currentOrderId);
+        }
+      } catch (err) {
+        alert('Simulation error');
+      } finally {
+        btnSimulateCustomerPay.textContent = '🚀 Simulate 1-Click UPI Payment';
+        btnSimulateCustomerPay.disabled = false;
+      }
+    });
+
+    function showSuccessAndRedirect(orderId) {
+      paymentViewStep.classList.remove('active');
+      successOverlay.classList.add('active');
+      setTimeout(() => {
+        window.location.href = `/store/order.html?orderId=${orderId}`;
+      }, 1500);
+    }
+
+    // Initialize
+    recalculatePricing();
+  </script>
+</body>
+</html>
